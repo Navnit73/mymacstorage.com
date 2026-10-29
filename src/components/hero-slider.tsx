@@ -80,7 +80,7 @@ export function HeroSlider() {
                 <Image
                   key={name}
                   src={src}
-                  alt={`${name} screen`}
+                  alt={`MyMacStorage ${name} screen on a Mac`}
                   fill
                   priority={i === 0}
                   sizes="(min-width: 1024px) 1024px, 100vw"

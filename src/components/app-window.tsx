@@ -71,7 +71,7 @@ export function AppWindow({ active = "Overview", image = null, className = "", c
         <Image
           key={image}
           src={image}
-          alt={`${active} screen`}
+          alt={`MyMacStorage ${active} screen on a Mac`}
           width={1385}
           height={940}
           sizes="(min-width: 1024px) 800px, 100vw"

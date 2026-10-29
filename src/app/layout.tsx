@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { APP_NAME, OG_IMAGE, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,8 +14,26 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MyMacStorage: See what\u2019s filling your Mac",
-  description: "See what is filling your Mac. Map your whole disk in one scan and clear what you do not need, safely.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  applicationName: APP_NAME,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: APP_NAME,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    locale: "en_GB",
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: `${APP_NAME} Overview screen showing disk usage on a Mac` }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE],
+  },
 };
 
 export const viewport: Viewport = {
