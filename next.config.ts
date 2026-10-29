@@ -5,7 +5,8 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "res.cloudinary.com", pathname: "/dipzpwbbk/**" }],
+    loader: "custom",
+    loaderFile: "./src/lib/image-loader.ts",
   },
   turbopack: {
     rules: {

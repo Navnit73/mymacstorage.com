@@ -74,7 +74,7 @@ export function AppWindow({ active = "Overview", image = null, className = "", c
           alt={`MyMacStorage ${active} screen on a Mac`}
           width={1385}
           height={940}
-          sizes="(min-width: 1024px) 800px, 100vw"
+          sizes="(min-width: 1024px) 800px, (min-width: 672px) 672px, 100vw"
           className="block h-auto w-full animate-fade-in"
         />
       ) : (

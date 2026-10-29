@@ -19,8 +19,18 @@ const INTERVAL_MS = 4500;
 const SWIPE_PX = 40;
 
 export function HeroSlider() {
-  const [index, setIndex] = useState(0);
+  // `mounted` holds the slides whose image is in the DOM: the current one, the next one, and any already shown.
+  // Stacked slides all sit in the viewport, so mounting every image at once would load them all up front.
+  const [{ index, mounted }, setSlider] = useState(() => ({ index: 0, mounted: new Set([0, 1]) }));
   const [paused, setPaused] = useState(false);
+
+  const setIndex = (update: (i: number) => number) =>
+    setSlider((prev) => {
+      const next = update(prev.index);
+      const after = (next + 1) % slides.length;
+      const mounted = prev.mounted.has(next) && prev.mounted.has(after) ? prev.mounted : new Set(prev.mounted).add(next).add(after);
+      return { index: next, mounted };
+    });
   const touchX = useRef<number | null>(null);
 
   useEffect(() => {
@@ -30,7 +40,7 @@ export function HeroSlider() {
   }, [index, paused]);
 
   const go = (step: number) => setIndex((i) => (i + step + slides.length) % slides.length);
-  const select = (name: string) => setIndex(slides.findIndex((s) => s.name === name));
+  const select = (name: string) => setIndex(() => slides.findIndex((s) => s.name === name));
   const current = slides[index];
 
   return (
@@ -42,7 +52,7 @@ export function HeroSlider() {
             <li key={name}>
               <button
                 type="button"
-                onClick={() => setIndex(i)}
+                onClick={() => setIndex(() => i)}
                 aria-pressed={isActive}
                 className={`flex w-full cursor-pointer flex-col items-center gap-1.5 rounded-xl py-2.5 transition-colors sm:gap-2 ${
                   isActive ? "bg-white text-lime-700" : "text-gray-600 hover:text-black"
@@ -76,19 +86,20 @@ export function HeroSlider() {
         <AppWindow active={current.name} onSelect={select}>
           <div className="relative aspect-[3/2]">
             {slides.map(({ name, src }, i) =>
-              src ? (
+              src && mounted.has(i) ? (
                 <Image
                   key={name}
                   src={src}
                   alt={`MyMacStorage ${name} screen on a Mac`}
                   fill
-                  priority={i === 0}
+                  preload={i === 0}
+                  fetchPriority={i === 0 ? undefined : "low"}
                   sizes="(min-width: 1024px) 1024px, 100vw"
                   className={`object-cover object-top transition-opacity duration-700 ${
                     i === index ? "opacity-100" : "opacity-0"
                   }`}
                 />
-              ) : (
+              ) : src ? null : (
                 <div
                   key={name}
                   className={`absolute inset-3 flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium text-gray-500 transition-opacity duration-700 sm:inset-4 ${
@@ -107,7 +118,7 @@ export function HeroSlider() {
             <button
               key={name}
               type="button"
-              onClick={() => setIndex(i)}
+              onClick={() => setIndex(() => i)}
               aria-label={`Show ${name}`}
               className="group flex h-6 cursor-pointer items-center px-1"
             >
