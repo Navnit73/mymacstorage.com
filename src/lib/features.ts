@@ -21,7 +21,7 @@ export const features: Feature[] = [
     name: "Overview",
     description: "One scan, and your whole drive on one screen.",
     icon: ChartPie,
-    image: "https://res.cloudinary.com/dipzpwbbk/image/upload/v1793287028/overview_lfyfha.jpg",
+    image: "https://res.cloudinary.com/dipzpwbbk/image/upload/c_crop,x_0,y_0,w_2460,h_1633/v1793287028/overview_lfyfha.jpg",
   },
   {
     name: "Find",
