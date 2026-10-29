@@ -31,6 +31,11 @@ export function pageMetadata({
   };
 }
 
+/** Plain YYYY-MM-DD date as a full ISO 8601 datetime with a time zone, as schema.org dates expect. */
+export function isoDateTime(date: string) {
+  return `${date}T00:00:00+00:00`;
+}
+
 export const websiteNode = {
   "@type": "WebSite",
   "@id": `${SITE_URL}/#website`,

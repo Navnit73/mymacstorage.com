@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ContentPage } from "@/components/content-page";
-import { innerPageGraph, pageMetadata } from "@/lib/seo";
+import { innerPageGraph, isoDateTime, pageMetadata } from "@/lib/seo";
 import { APP_NAME, GUIDE_PATH, OG_IMAGE, PRICE, SITE_URL, pages } from "@/lib/site";
 
 const path = GUIDE_PATH;
@@ -43,8 +43,8 @@ const graph = [
     headline: title,
     description,
     image: OG_IMAGE,
-    datePublished: "2026-10-29",
-    dateModified: updated,
+    datePublished: isoDateTime("2026-10-29"),
+    dateModified: isoDateTime(updated),
     author: { "@id": `${SITE_URL}/#organization` },
     publisher: { "@id": `${SITE_URL}/#organization` },
     mainEntityOfPage: { "@id": `${SITE_URL}${path}#webpage` },
