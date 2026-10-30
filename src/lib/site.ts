@@ -19,15 +19,15 @@ export const SYSTEM_DATA_GUIDE_PATH = "/guides/how-to-reduce-system-data-on-mac"
 export const LARGE_FILES_GUIDE_PATH = "/guides/how-to-find-large-files-on-mac";
 export const DUPLICATES_GUIDE_PATH = "/guides/how-to-find-duplicate-files-on-mac";
 
-/** Public pages other than the home page, in sitemap and footer order. */
+/** Public pages other than the home page, in sitemap and footer order. `group` is the footer column. */
 export const pages = [
-  { path: GUIDE_PATH, label: "Free up space guide", updated: "2026-10-30" },
-  { path: SYSTEM_DATA_GUIDE_PATH, label: "System Data guide", updated: "2026-10-30" },
-  { path: LARGE_FILES_GUIDE_PATH, label: "Large files guide", updated: "2026-10-30" },
-  { path: DUPLICATES_GUIDE_PATH, label: "Duplicate files guide", updated: "2026-10-30" },
-  { path: "/about", label: "About", updated: "2026-10-29" },
-  { path: "/contact", label: "Contact", updated: "2026-10-29" },
-  { path: "/privacy", label: "Privacy", updated: "2026-10-29" },
-  { path: "/terms", label: "Terms", updated: "2026-10-29" },
-  { path: "/refund-policy", label: "Refunds", updated: "2026-10-29" },
+  { path: GUIDE_PATH, label: "Free up space", group: "Guides", updated: "2026-10-30" },
+  { path: SYSTEM_DATA_GUIDE_PATH, label: "Reduce System Data", group: "Guides", updated: "2026-10-30" },
+  { path: LARGE_FILES_GUIDE_PATH, label: "Find large files", group: "Guides", updated: "2026-10-30" },
+  { path: DUPLICATES_GUIDE_PATH, label: "Find duplicate files", group: "Guides", updated: "2026-10-30" },
+  { path: "/about", label: "About", group: "Company", updated: "2026-10-29" },
+  { path: "/contact", label: "Contact", group: "Company", updated: "2026-10-29" },
+  { path: "/privacy", label: "Privacy", group: "Legal", updated: "2026-10-29" },
+  { path: "/terms", label: "Terms", group: "Legal", updated: "2026-10-29" },
+  { path: "/refund-policy", label: "Refunds", group: "Legal", updated: "2026-10-29" },
 ];

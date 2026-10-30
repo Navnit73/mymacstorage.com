@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { APP_NAME, pages } from "@/lib/site";
+import { APP_NAME, PRICE, SUPPORT_EMAIL, pages } from "@/lib/site";
 import { Logo } from "./icons";
 
 const productLinks = [
@@ -8,22 +8,50 @@ const productLinks = [
   { href: "/#faq", label: "FAQ" },
 ];
 
+// Product links first, then each page group in the order it first appears in `pages`.
+const columns = [
+  { title: "Product", links: productLinks },
+  ...[...new Set(pages.map((p) => p.group))].map((group) => ({
+    title: group,
+    links: pages.filter((p) => p.group === group).map(({ path, label }) => ({ href: path, label })),
+  })),
+];
+
 export function SiteFooter() {
   return (
-    <footer className="border-t border-gray-200 px-4 py-8 sm:px-6">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-5 text-center lg:flex-row lg:text-left">
-        <Link href="/" className="flex items-center gap-2.5 font-semibold">
-          <Logo />
-          {APP_NAME}
-        </Link>
-        <nav aria-label="Footer" className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-gray-600">
-          {[...productLinks, ...pages.map(({ path, label }) => ({ href: path, label }))].map(({ href, label }) => (
-            <Link key={href} href={href} className="hover:text-black">
-              {label}
+    <footer className="border-t border-gray-200 px-4 pt-12 pb-8 sm:px-6 sm:pt-16">
+      <div className="mx-auto max-w-6xl">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 lg:grid-cols-[2fr_repeat(4,minmax(0,1fr))]">
+          <div className="col-span-2 sm:col-span-4 lg:col-span-1">
+            <Link href="/" className="inline-flex items-center gap-2.5 font-semibold">
+              <Logo />
+              {APP_NAME}
             </Link>
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-pretty text-gray-500">
+              Disk cleanup for Mac, done safely. {PRICE} once, no subscription.
+            </p>
+          </div>
+          {columns.map(({ title, links }) => (
+            <nav key={title} aria-label={title}>
+              <p className="text-sm font-semibold text-black">{title}</p>
+              <ul className="mt-4 space-y-3 text-sm">
+                {links.map(({ href, label }) => (
+                  <li key={href}>
+                    <Link href={href} className="text-gray-600 transition-colors hover:text-black">
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           ))}
-        </nav>
-        <p className="text-sm text-gray-500">&copy; 2026 {APP_NAME}</p>
+        </div>
+        <div className="mt-12 flex flex-col gap-2 border-t border-gray-200 pt-6 text-sm text-gray-500 sm:flex-row sm:items-center sm:justify-between">
+          <p>&copy; 2026 {APP_NAME}. All rights reserved.</p>
+          <a href={`mailto:${SUPPORT_EMAIL}`} className="transition-colors hover:text-black">
+            {SUPPORT_EMAIL}
+          </a>
+        </div>
       </div>
     </footer>
   );
