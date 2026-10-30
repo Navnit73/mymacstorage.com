@@ -28,7 +28,7 @@ export const config = {
     {
       // Everything except build output and static files. robots.txt and sitemap.xml stay in: bots fetching them
       // are worth seeing.
-      source: "/((?!_next/static|_next/image|icon|apple-icon|api/admin|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|css|js|map|woff2?)$).*)",
+      source: "/((?!_next/static|_next/image|icon|apple-icon|api/admin|navnit_admin|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|css|js|map|woff2?)$).*)",
       // Link prefetches aren't visits.
       missing: [
         { type: "header", key: "next-router-prefetch" },

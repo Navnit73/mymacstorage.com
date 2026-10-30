@@ -71,12 +71,42 @@ export type LogEntry = {
   data?: Record<string, unknown>;
 };
 
+/** Someone who can sign in to the admin panel. Created with `npm run seed:admin`. */
+export type Admin = {
+  email: string;
+  /** `scrypt$<salt>$<hash>`, both base64. See src/lib/admin-auth.ts. */
+  passwordHash: string;
+  createdAt: Date;
+  lastLoginAt?: Date;
+};
+
+/** A signed-in admin. The cookie holds a random token; only its SHA-256 is stored, as `_id`. */
+export type AdminSession = {
+  _id: string;
+  adminId: string;
+  email: string;
+  ip: string | null;
+  userAgent: string | null;
+  createdAt: Date;
+  expiresAt: Date;
+};
+
+/** A failed admin sign-in, counted per IP to slow down password guessing. */
+export type LoginFailure = {
+  ip: string;
+  email: string;
+  at: Date;
+};
+
 type Collections = {
   visits: Visit;
   orders: Order;
   webhook_events: WebhookEvent;
   emails: EmailLog;
   logs: LogEntry;
+  admins: Admin;
+  admin_sessions: AdminSession;
+  login_failures: LoginFailure;
 };
 
 // Kept on globalThis so dev-mode hot reloads reuse one connection pool instead of opening a new one per edit.
@@ -115,5 +145,9 @@ async function ensureIndexes(database: Db) {
     database.collection("orders").createIndex({ customerId: 1, createdAt: -1 }),
     database.collection("emails").createIndex({ at: -1 }),
     database.collection("logs").createIndex({ at: 1 }, { expireAfterSeconds: ninetyDays }),
+    database.collection("admins").createIndex({ email: 1 }, { unique: true }),
+    database.collection("admin_sessions").createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
+    database.collection("login_failures").createIndex({ at: 1 }, { expireAfterSeconds: 60 * 15 }),
+    database.collection("login_failures").createIndex({ ip: 1, at: -1 }),
   ]);
 }

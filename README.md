@@ -72,6 +72,18 @@ Everything is stored in MongoDB (`src/lib/db.ts`). Indexes are created on first 
 | `emails` | Every Resend send, with its Resend ID or the error. |
 | `logs` | Backend events from `logger()` in `src/lib/logger.ts`, also printed to the console as JSON. Kept 90 days. |
 
+## Admin panel
+
+Sign in at `/navnit_admin` to see traffic (people vs bots, top pages, top bots), browse the visit log, look up orders, resend a buyer's licence email, and read backend logs. Pages are `noindex` and admin page views aren't logged as visits.
+
+Admins live in the `admins` collection with scrypt-hashed passwords. To add one or reset a password:
+
+```sh
+ADMIN_PASSWORD='a-long-password' npm run seed:admin -- you@example.com
+```
+
+Sessions last 7 days and are stored in `admin_sessions`, so resetting a password signs that admin out everywhere. After 10 failed sign-ins an IP is locked out for 15 minutes. Times are shown in UTC unless `ADMIN_TIME_ZONE` is set, e.g. `Asia/Kolkata`.
+
 ## Admin API
 
 Send `Authorization: Bearer $ADMIN_API_TOKEN`.
