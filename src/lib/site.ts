@@ -14,11 +14,11 @@ export const SITE_DESCRIPTION = `Disk cleanup for Mac, done safely. One scan fin
 export const OG_IMAGE =
   "https://res.cloudinary.com/dipzpwbbk/image/upload/c_crop,x_0,y_0,w_2460,h_1633/c_fill,g_north,w_1200,h_630/v1793287028/overview_lfyfha.jpg";
 
-export const GUIDE_PATH = "/guides/how-to-free-up-disk-space-on-mac";
+export const GUIDE_PATH = "/guides/how-to-free-up-space-on-mac";
 
 /** Public pages other than the home page, in sitemap and footer order. */
 export const pages = [
-  { path: GUIDE_PATH, label: "Free up space guide", updated: "2026-10-29" },
+  { path: GUIDE_PATH, label: "Free up space guide", updated: "2026-10-30" },
   { path: "/about", label: "About", updated: "2026-10-29" },
   { path: "/contact", label: "Contact", updated: "2026-10-29" },
   { path: "/privacy", label: "Privacy", updated: "2026-10-29" },

@@ -611,7 +611,7 @@ function Faq() {
         <p className="mt-4 text-center text-gray-600">
           Prefer to do it by hand? Read our guide on{" "}
           <Link href={GUIDE_PATH} className="font-medium text-lime-700 underline-offset-4 hover:underline">
-            how to free up disk space on a Mac
+            how to free up space on a Mac
           </Link>
           .
         </p>

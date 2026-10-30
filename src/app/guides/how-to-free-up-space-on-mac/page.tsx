@@ -4,17 +4,44 @@ import { innerPageGraph, isoDateTime, pageMetadata } from "@/lib/seo";
 import { APP_NAME, GUIDE_PATH, OG_IMAGE, PRICE, SITE_URL, pages } from "@/lib/site";
 
 const path = GUIDE_PATH;
-const title = "How to free up disk space on a Mac: 12 safe ways";
+const title = "How to free up space on a Mac: 14 safe ways";
 const description =
-  "Learn how to free up disk space on a Mac with 12 safe steps: clear caches, large files, app leftovers and System Data on any MacBook, iMac or Mac mini.";
-const updated = pages.find((p) => p.path === path)?.updated ?? "2026-10-29";
+  "Learn how to free up space on a Mac in 14 safe steps. Delete large files, old iPhone backups, caches and app leftovers, and shrink System Data on any MacBook.";
+const updated = pages.find((p) => p.path === path)?.updated ?? "2026-10-30";
 
 export const metadata = pageMetadata({
-  title: "How to Free Up Disk Space on a Mac (12 Safe Ways)",
+  title: "How to Free Up Space on a Mac (14 Safe Ways)",
   description,
   path,
   type: "article",
 });
+
+const methods = [
+  { method: "Empty the Trash", time: "1 min", space: "Small to large", risk: "None" },
+  { method: "Clear the Downloads folder", time: "5 min", space: "Medium", risk: "Low" },
+  { method: "Turn on Optimize Storage and iCloud", time: "2 min", space: "Medium to large", risk: "None" },
+  { method: "Find large files", time: "10 min", space: "Large", risk: "Low" },
+  { method: "Delete old iPhone and iPad backups", time: "2 min", space: "Large", risk: "Low" },
+  { method: "Remove Messages and Mail attachments", time: "5 min", space: "Medium", risk: "Low" },
+  { method: "Delete duplicates", time: "10 min", space: "Medium", risk: "Low" },
+  { method: "Uninstall unused apps", time: "5 min", space: "Large", risk: "Low" },
+  { method: "Remove app leftovers", time: "10 min", space: "Small to medium", risk: "Medium" },
+  { method: "Clear app and browser caches", time: "5 min", space: "Medium", risk: "Low" },
+  { method: "Delete Time Machine snapshots", time: "2 min", space: "Large", risk: "Low" },
+  { method: "Restart your Mac", time: "2 min", space: "Small to medium", risk: "None" },
+  { method: "Clean up developer files", time: "10 min", space: "Large", risk: "Low" },
+  { method: "Move your Photos library", time: "20 min", space: "Large", risk: "Medium" },
+];
+
+const categories = [
+  { name: "Applications", holds: "Every app you have installed", fix: "Step 8" },
+  { name: "Documents", holds: "Files in your home folder, including Downloads", fix: "Steps 2 and 4" },
+  { name: "Photos", holds: "Your Photos library", fix: "Steps 7 and 14" },
+  { name: "iOS Files", holds: "iPhone and iPad backups and software updates", fix: "Step 5" },
+  { name: "Messages", holds: "Photos, videos and files from your chats", fix: "Step 6" },
+  { name: "System Data", holds: "Caches, logs, snapshots and app support files", fix: "Steps 9 to 12" },
+  { name: "macOS", holds: "The operating system itself", fix: "Leave it alone" },
+];
 
 const faqs = [
   {
@@ -23,7 +50,19 @@ const faqs = [
   },
   {
     q: "Why is my Mac storage full when I have few files?",
-    a: "Your own documents are often the smallest part. Caches, app support files, Time Machine snapshots, developer tools and leftovers from removed apps fill the rest, and macOS files most of them under System Data.",
+    a: "Your own documents are often the smallest part. Caches, app support files, Time Machine snapshots, iPhone backups and leftovers from removed apps fill the rest, and macOS files most of them under System Data.",
+  },
+  {
+    q: "How do I clear Other storage on a Mac?",
+    a: "Apple renamed Other storage to System Data in macOS Monterey. To shrink it, clear app caches, delete local Time Machine snapshots, remove files that uninstalled apps left behind and restart your Mac.",
+  },
+  {
+    q: "How do I free up space on a MacBook Air?",
+    a: "Use the same steps as any other Mac. Many MacBook Air models ship with 256 GB of storage, so old iPhone backups, a large Photos library and Store in iCloud usually make the biggest difference.",
+  },
+  {
+    q: "Why didn't my free space go up after I deleted files?",
+    a: "Deleted files stay in the Trash until you empty it. macOS may also keep local Time Machine snapshots of them for a while, and Storage settings can take a few minutes to recalculate. Empty the Trash and restart to see the real figure.",
   },
   {
     q: "Is it safe to delete the Caches folder on a Mac?",
@@ -36,7 +75,7 @@ const faqs = [
 ];
 
 const graph = [
-  ...innerPageGraph({ path, name: "Free up disk space on a Mac", description }),
+  ...innerPageGraph({ path, name: "Free up space on a Mac", description }),
   {
     "@type": "Article",
     "@id": `${SITE_URL}${path}#article`,
@@ -62,62 +101,129 @@ export default function GuidePage() {
   return (
     <ContentPage
       title={title}
-      intro="Your Mac says its disk is almost full. These 12 steps free up space safely, from one-click quick wins to the hidden files most guides miss."
-      breadcrumb="Free up disk space on a Mac"
+      intro="Your Mac says its disk is almost full. Here is how to free up space on a Mac safely, from two-minute quick wins to the hidden files most guides miss."
+      breadcrumb="Free up space on a Mac"
       updated={updated}
       graph={graph}
     >
       <p>
-        Every step below uses tools that macOS already includes, and works on any MacBook Air, MacBook Pro, iMac, Mac
-        mini or Mac Studio running a recent version of macOS. Work from the top: the first steps are the safest and
-        often free the most space.
+        Every step uses tools that macOS already includes and works on any MacBook Air, MacBook Pro, iMac, Mac mini or
+        Mac Studio. The menus below match macOS Ventura and later. On an older version, choose{" "}
+        <strong>Apple menu</strong>, then <strong>About This Mac</strong>, then <strong>Storage</strong>, and click{" "}
+        <strong>Manage</strong>.
       </p>
+
+      <h2>The short answer</h2>
+      <p>If you only have five minutes, do these five things to clear space on a Mac:</p>
+      <ol>
+        <li>Empty the Trash and your Downloads folder.</li>
+        <li>Turn on Optimize Storage and Store in iCloud.</li>
+        <li>Delete large files and old iPhone backups.</li>
+        <li>Uninstall apps you no longer use.</li>
+        <li>Clear app caches, then restart your Mac.</li>
+      </ol>
+
+      <h2>All 14 methods at a glance</h2>
+      <p>
+        Pick the steps that suit your Mac. How much space each one frees depends on how you use your Mac, so treat the
+        middle column as a rough guide.
+      </p>
+      <div className="mt-6 overflow-x-auto">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Method</th>
+              <th scope="col">Time</th>
+              <th scope="col">Space freed</th>
+              <th scope="col">Risk</th>
+            </tr>
+          </thead>
+          <tbody>
+            {methods.map(({ method, time, space, risk }, i) => (
+              <tr key={method}>
+                <th scope="row">
+                  {i + 1}. {method}
+                </th>
+                <td>{time}</td>
+                <td>{space}</td>
+                <td>{risk}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <h2>Check what is using your Mac storage</h2>
       <p>
-        Before you delete anything, find out where the space went. Choose <strong>Apple menu</strong>, then{" "}
+        Learning how to free up disk space on a Mac starts with one question: where did the space go? Choose <strong>Apple menu</strong>, then{" "}
         <strong>System Settings</strong>, then <strong>General</strong>, then <strong>Storage</strong>. macOS draws a
-        bar for your disk and lists each category, such as Applications, Documents, Photos and System Data, with its
-        size.
+        bar for your disk and lists each category with its size.
       </p>
       <p>
-        Click the info button next to a category to see what it holds. Note the two or three biggest categories. They
-        tell you which of the steps below will help most.
+        Click the info button next to a category to see what it holds. The two or three largest categories tell you
+        which of the steps below will help most.
       </p>
 
-      <h2>Quick wins that free space in minutes</h2>
+      <h3>What each storage category means</h3>
+      <div className="mt-6 overflow-x-auto">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Category</th>
+              <th scope="col">What it holds</th>
+              <th scope="col">How to shrink it</th>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map(({ name, holds, fix }) => (
+              <tr key={name}>
+                <th scope="row">{name}</th>
+                <td>{holds}</td>
+                <td>{fix}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Quick wins: clear space on a Mac in minutes</h2>
 
       <h3>1. Empty the Trash</h3>
       <p>
         Files in the Trash still use disk space. Control-click the Trash in the Dock and choose{" "}
-        <strong>Empty Trash</strong>. To stop it building up again, turn on <strong>Empty Trash Automatically</strong> in
-        Storage settings. macOS then removes items that have sat in the Trash for 30 days.
+        <strong>Empty Trash</strong>. Then check two bins people often forget: the <strong>Recently Deleted</strong>{" "}
+        album in Photos, which keeps deleted pictures for 30 days, and deleted mail, which you clear in Mail by choosing{" "}
+        <strong>Mailbox</strong>, then <strong>Erase Deleted Items</strong>.
       </p>
 
       <h3>2. Clear your Downloads folder</h3>
       <p>
-        Downloads quietly collects installers, archives and videos. Open it in Finder, choose{" "}
-        <strong>View</strong>, then <strong>as List</strong>, and click the <strong>Size</strong> column to put the
-        largest files first. Old <code>.dmg</code> and <code>.pkg</code> installers are safe to remove once the app is
-        installed.
+        Downloads quietly collects installers, archives and videos. Open it in Finder, choose <strong>View</strong>,
+        then <strong>as List</strong>, and click the <strong>Size</strong> column to put the largest files first. Old{" "}
+        <code>.dmg</code> and <code>.pkg</code> installers are safe to remove once the app is installed.
       </p>
 
-      <h3>3. Turn on the Storage recommendations</h3>
-      <p>Storage settings offers a few built-in helpers at the top of the page:</p>
+      <h3>3. Turn on Optimize Storage and Store in iCloud</h3>
+      <p>Storage settings offers built-in helpers at the top of the page:</p>
       <ul>
         <li>
           <strong>Store in iCloud</strong> keeps older files and photos in iCloud and downloads them when you open them.
+          It needs enough free room in your iCloud plan.
         </li>
         <li>
           <strong>Optimize Storage</strong> removes Apple TV films and shows you&rsquo;ve watched, and keeps only recent
           email attachments.
         </li>
         <li>
-          <strong>Empty Trash Automatically</strong> clears the Trash after 30 days.
+          <strong>Empty Trash Automatically</strong> removes items that have sat in the Trash for 30 days.
         </li>
       </ul>
 
-      <h2>Find and remove large files</h2>
+      <h2>Find and delete large files</h2>
+      <p>
+        This is often the fastest way to clear disk space on a Mac, because a handful of big files can outweigh
+        thousands of small ones.
+      </p>
 
       <h3>4. Search for large files in Finder</h3>
       <p>
@@ -127,34 +233,45 @@ export default function GuidePage() {
         forgotten.
       </p>
 
-      <h3>5. Remove large message attachments</h3>
+      <h3>5. Delete old iPhone and iPad backups</h3>
+      <p>
+        Every time you back up an iPhone or iPad to your Mac, the backup lands on your startup disk. In Storage
+        settings, click the info button next to <strong>iOS Files</strong>. Select backups of devices you no longer
+        own, or ones you now back up to iCloud, and click <strong>Delete</strong>. A single backup can take tens of
+        gigabytes.
+      </p>
+
+      <h3>6. Remove Messages and Mail attachments</h3>
       <p>
         In Storage settings, click the info button next to <strong>Messages</strong>. macOS lists photos, videos and
-        files from your conversations, largest first. Select the ones you no longer need and click{" "}
-        <strong>Delete</strong>.
+        files from your chats, largest first. Select the ones you no longer need and click <strong>Delete</strong>.
+      </p>
+      <p>
+        For Mail, open <strong>Mail</strong>, then <strong>Settings</strong>, then <strong>General</strong>, and set{" "}
+        <strong>Remove unedited downloads</strong> to <strong>After Message is Deleted</strong>.
       </p>
 
-      <h3>6. Delete duplicate photos and files</h3>
+      <h3>7. Delete duplicate photos and files</h3>
       <p>
         The Photos app finds duplicate photos for you. Open Photos and choose <strong>Duplicates</strong> under
-        Utilities in the sidebar, then merge each set. For other files, duplicates are harder to spot by hand, because
-        two copies often have different names.
+        Utilities in the sidebar, then merge each set. Duplicate documents are harder to spot by hand, because two
+        copies often have different names.
       </p>
 
-      <h2>Clean up apps and their leftovers</h2>
+      <h2>Free up storage on a Mac by removing apps</h2>
 
-      <h3>7. Uninstall apps you no longer use</h3>
+      <h3>8. Uninstall apps you no longer use</h3>
       <p>
         In Storage settings, click the info button next to <strong>Applications</strong>. Sort by size, select the apps
         you don&rsquo;t use and click <strong>Delete</strong>. Games, video editors and design suites often take tens of
         gigabytes each.
       </p>
 
-      <h3>8. Remove files that deleted apps leave behind</h3>
+      <h3>9. Remove files that deleted apps leave behind</h3>
       <p>
         Dragging an app to the Trash removes the app, but not its support files. In Finder, choose{" "}
-        <strong>Go</strong>, then <strong>Go to Folder</strong> (Shift-Command-G), and check these folders for names of
-        apps you have removed:
+        <strong>Go</strong>, then <strong>Go to Folder</strong> (Shift-Command-G), and check these folders for the names
+        of apps you have removed:
       </p>
       <ul>
         <li>
@@ -167,51 +284,105 @@ export default function GuidePage() {
           <code>~/Library/Caches</code>
         </li>
       </ul>
-      <p>Delete only folders that clearly belong to apps you have already uninstalled.</p>
+      <p>Delete only folders that clearly belong to apps you have already uninstalled. When in doubt, leave it.</p>
 
-      <h2>Clear caches and System Data</h2>
-
-      <h3>9. Clear app caches</h3>
+      <h2>How to clear System Data (formerly Other storage)</h2>
       <p>
-        Apps store temporary files in <code>~/Library/Caches</code>, and they can grow to several gigabytes. Quit the app
-        first, then delete the contents of its folder inside Caches. Leave the Caches folder itself in place. The app
-        rebuilds what it needs the next time it opens.
+        System Data, called Other storage before macOS Monterey, holds caches, logs, Time Machine snapshots and app
+        support files. It can quietly grow to tens of gigabytes, and Storage settings won&rsquo;t let you browse it.
+        These three steps shrink it.
       </p>
 
-      <h3>10. Remove local Time Machine snapshots</h3>
+      <h3>10. Clear app and browser caches</h3>
+      <p>
+        Apps store temporary files in <code>~/Library/Caches</code>. Quit an app first, then delete the contents of its
+        folder inside Caches. Leave the Caches folder itself in place.
+      </p>
+      <h4>Safari</h4>
+      <p>
+        Choose <strong>Safari</strong>, then <strong>Settings</strong>, then <strong>Advanced</strong>, and turn on{" "}
+        <strong>Show features for web developers</strong>. Then choose <strong>Develop</strong>, then{" "}
+        <strong>Empty Caches</strong>.
+      </p>
+      <h4>Chrome</h4>
+      <p>
+        Open <strong>Settings</strong>, then <strong>Privacy and security</strong>, then{" "}
+        <strong>Delete browsing data</strong>. Select only <strong>Cached images and files</strong> so you stay signed
+        in to your accounts.
+      </p>
+
+      <h3>11. Delete local Time Machine snapshots</h3>
       <p>
         If you use Time Machine, macOS keeps local snapshots on your disk and counts them under System Data. It removes
-        them automatically when space runs low, but you can clear them sooner. Open Terminal and run{" "}
+        them when space runs low, but you can clear them sooner. Open Terminal and run{" "}
         <code>tmutil listlocalsnapshots /</code> to see them, then{" "}
         <code>sudo tmutil deletelocalsnapshots 2026-10-28-120000</code>, using a date from the list.
       </p>
 
-      <h3>11. Restart your Mac</h3>
+      <h3>12. Restart your Mac</h3>
       <p>
-        A restart clears temporary files and swap files that macOS creates while it runs. If System Data looks
-        unusually large, restart before you go hunting for anything else.
+        A restart clears the temporary and swap files that macOS creates while it runs. If System Data still looks
+        unusually large, restart before you hunt for anything else.
       </p>
 
-      <h2>Clear developer files</h2>
+      <h2>Clean up developer files</h2>
       <p>If you write code on your Mac, developer tools are often the biggest hidden user of space.</p>
-      <h3>12. Delete build files and unused tool data</h3>
+
+      <h3>13. Delete build files and unused tool data</h3>
       <h4>Xcode</h4>
       <p>
         Delete <code>~/Library/Developer/Xcode/DerivedData</code>. Xcode rebuilds it on the next build. Run{" "}
         <code>xcrun simctl delete unavailable</code> to remove simulators for iOS versions you no longer have installed.
       </p>
-      <h4>Node.js projects</h4>
+      <h4>Node.js</h4>
       <p>
         Every project keeps its own <code>node_modules</code> folder. Delete it in projects you aren&rsquo;t working on.
         Running <code>npm install</code> brings it back when you need it.
       </p>
-      <h4>Docker</h4>
+      <h4>Docker and Homebrew</h4>
       <p>
         Run <code>docker system prune</code> to remove stopped containers, unused networks and dangling images. Docker
-        lists what it will delete and asks you to confirm first.
+        lists what it will delete and asks you to confirm first. Run <code>brew cleanup</code> to remove old package
+        versions and cached downloads.
       </p>
 
-      <h2>The faster way: one scan with MyMacStorage</h2>
+      <h2>Move big libraries to an external drive</h2>
+
+      <h3>14. Move your Photos library</h3>
+      <p>
+        If your photos take up most of your disk, and iCloud isn&rsquo;t an option, move the library. Quit Photos, then
+        drag <strong>Photos Library</strong> from your Pictures folder to an external drive formatted as APFS or Mac OS
+        Extended. Hold the <strong>Option</strong> key as you open Photos and choose the library on the drive.
+      </p>
+      <p>
+        Once your photos open from the drive, delete the original library from your Mac. Keep the drive connected
+        whenever you use Photos.
+      </p>
+
+      <h2>What not to delete on your Mac</h2>
+      <p>
+        When you clear disk space on a Mac, some files look like clutter but keep your Mac running. Leave these alone:
+      </p>
+      <ul>
+        <li>
+          <strong>The System and Library folders at the top of your disk.</strong> They hold files macOS needs to start
+          up.
+        </li>
+        <li>
+          <strong>The Caches folder itself.</strong> Clear the folders inside it, never the folder.
+        </li>
+        <li>
+          <strong>Containers for apps you still use.</strong> They hold those apps&rsquo; data and settings.
+        </li>
+        <li>
+          <strong>
+            Anything a guide tells you to remove with <code>sudo rm -rf</code>.
+          </strong>{" "}
+          One typo can erase files you can&rsquo;t get back.
+        </li>
+      </ul>
+
+      <h2>Free up space faster with {APP_NAME}</h2>
       <p>
         The steps above work, but they take time, and each one shows only part of your disk. {APP_NAME} does all of it
         in one scan. It names everything inside System Data, lists your biggest files, finds duplicates byte for byte

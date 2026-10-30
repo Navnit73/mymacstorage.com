@@ -13,6 +13,9 @@ const prose =
   "[&_h4]:mt-6 [&_h4]:font-semibold [&_h4]:text-black " +
   "[&_p]:mt-4 [&_ul]:mt-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:mt-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:mt-2 " +
   "[&_strong]:font-semibold [&_strong]:text-black " +
+  "[&_table]:w-full [&_table]:text-left [&_table]:text-sm sm:[&_table]:text-base [&_thead]:text-gray-500 " +
+  "[&_tr]:border-b [&_tr]:border-gray-200 [&_th]:px-3 [&_th]:py-3 [&_th]:align-top [&_thead_th]:font-medium " +
+  "[&_tbody_th]:font-medium [&_tbody_th]:text-black [&_td]:px-3 [&_td]:py-3 [&_td]:align-top " +
   "[&_code]:rounded [&_code]:bg-gray-100 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.9em] [&_code]:text-black";
 
 export function ContentPage({
