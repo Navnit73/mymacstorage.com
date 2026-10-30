@@ -37,6 +37,8 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [OG_IMAGE],
   },
+  // Bing Webmaster Tools site ownership.
+  verification: { other: { "msvalidate.01": "6BFE4F80CD650E2E0CA99EA3C6C7664F" } },
 };
 
 export const viewport: Viewport = {
