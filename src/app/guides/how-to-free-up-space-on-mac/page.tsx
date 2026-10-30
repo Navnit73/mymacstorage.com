@@ -1,7 +1,17 @@
 import Link from "next/link";
 import { ContentPage } from "@/components/content-page";
 import { innerPageGraph, isoDateTime, pageMetadata } from "@/lib/seo";
-import { APP_NAME, GUIDE_PATH, OG_IMAGE, PRICE, SITE_URL, pages } from "@/lib/site";
+import {
+  APP_NAME,
+  DUPLICATES_GUIDE_PATH,
+  GUIDE_PATH,
+  LARGE_FILES_GUIDE_PATH,
+  OG_IMAGE,
+  PRICE,
+  SITE_URL,
+  SYSTEM_DATA_GUIDE_PATH,
+  pages,
+} from "@/lib/site";
 
 const path = GUIDE_PATH;
 const title = "How to free up space on a Mac: 14 safe ways";
@@ -20,10 +30,10 @@ const methods = [
   { method: "Empty the Trash", time: "1 min", space: "Small to large", risk: "None" },
   { method: "Clear the Downloads folder", time: "5 min", space: "Medium", risk: "Low" },
   { method: "Turn on Optimize Storage and iCloud", time: "2 min", space: "Medium to large", risk: "None" },
-  { method: "Find large files", time: "10 min", space: "Large", risk: "Low" },
+  { method: "Remove big files", time: "10 min", space: "Large", risk: "Low" },
   { method: "Delete old iPhone and iPad backups", time: "2 min", space: "Large", risk: "Low" },
   { method: "Remove Messages and Mail attachments", time: "5 min", space: "Medium", risk: "Low" },
-  { method: "Delete duplicates", time: "10 min", space: "Medium", risk: "Low" },
+  { method: "Clear out extra copies", time: "10 min", space: "Medium", risk: "Low" },
   { method: "Uninstall unused apps", time: "5 min", space: "Large", risk: "Low" },
   { method: "Remove app leftovers", time: "10 min", space: "Small to medium", risk: "Medium" },
   { method: "Clear app and browser caches", time: "5 min", space: "Medium", risk: "Low" },
@@ -53,8 +63,8 @@ const faqs = [
     a: "Your own documents are often the smallest part. Caches, app support files, Time Machine snapshots, iPhone backups and leftovers from removed apps fill the rest, and macOS files most of them under System Data.",
   },
   {
-    q: "How do I clear Other storage on a Mac?",
-    a: "Apple renamed Other storage to System Data in macOS Monterey. To shrink it, clear app caches, delete local Time Machine snapshots, remove files that uninstalled apps left behind and restart your Mac.",
+    q: "Can I free up space without deleting files?",
+    a: "Yes. Turn on Store in iCloud to keep older files and photos in iCloud, or move large libraries such as Photos to an external drive. Your files stay available, but they no longer fill your Mac's disk.",
   },
   {
     q: "How do I free up space on a MacBook Air?",
@@ -219,18 +229,18 @@ export default function GuidePage() {
         </li>
       </ul>
 
-      <h2>Find and delete large files</h2>
+      <h2>Delete big files you no longer need</h2>
       <p>
         This is often the fastest way to clear disk space on a Mac, because a handful of big files can outweigh
         thousands of small ones.
       </p>
 
-      <h3>4. Search for large files in Finder</h3>
+      <h3>4. Remove old videos, disk images and archives</h3>
       <p>
-        Open a Finder window and press <strong>Command-F</strong>. Click the <strong>Kind</strong> menu, choose{" "}
-        <strong>Other</strong>, then select <strong>File Size</strong>. Set it to <strong>is greater than 1 GB</strong>.
-        Finder now lists every large file, including old video exports, disk images and virtual machines you may have
-        forgotten.
+        In Storage settings, click the info button next to <strong>Documents</strong> and open the{" "}
+        <strong>Large Files</strong> tab. Old video exports, disk images and virtual machines often top the list. For
+        Finder searches, folder sizes and Terminal commands, read our guide on{" "}
+        <Link href={LARGE_FILES_GUIDE_PATH}>how to find large files on a Mac</Link>.
       </p>
 
       <h3>5. Delete old iPhone and iPad backups</h3>
@@ -251,11 +261,11 @@ export default function GuidePage() {
         <strong>Remove unedited downloads</strong> to <strong>After Message is Deleted</strong>.
       </p>
 
-      <h3>7. Delete duplicate photos and files</h3>
+      <h3>7. Clear out extra copies</h3>
       <p>
-        The Photos app finds duplicate photos for you. Open Photos and choose <strong>Duplicates</strong> under
-        Utilities in the sidebar, then merge each set. Duplicate documents are harder to spot by hand, because two
-        copies often have different names.
+        Open Photos and choose <strong>Duplicates</strong> under Utilities in the sidebar, then merge each set. Copies of
+        documents and downloads are harder to spot, because two copies often have different names. Our guide on{" "}
+        <Link href={DUPLICATES_GUIDE_PATH}>how to find duplicate files on a Mac</Link> shows every method.
       </p>
 
       <h2>Free up storage on a Mac by removing apps</h2>
@@ -286,11 +296,11 @@ export default function GuidePage() {
       </ul>
       <p>Delete only folders that clearly belong to apps you have already uninstalled. When in doubt, leave it.</p>
 
-      <h2>How to clear System Data (formerly Other storage)</h2>
+      <h2>Shrink hidden system files</h2>
       <p>
-        System Data, called Other storage before macOS Monterey, holds caches, logs, Time Machine snapshots and app
-        support files. It can quietly grow to tens of gigabytes, and Storage settings won&rsquo;t let you browse it.
-        These three steps shrink it.
+        Caches, logs and Time Machine snapshots can quietly grow to tens of gigabytes, and macOS files them under
+        System Data. These three steps cover the basics. For every fix, read our guide on{" "}
+        <Link href={SYSTEM_DATA_GUIDE_PATH}>how to reduce System Data on a Mac</Link>.
       </p>
 
       <h3>10. Clear app and browser caches</h3>
