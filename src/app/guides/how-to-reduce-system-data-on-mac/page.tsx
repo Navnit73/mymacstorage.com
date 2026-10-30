@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ContentPage } from "@/components/content-page";
 import { innerPageGraph, isoDateTime, pageMetadata } from "@/lib/seo";
-import { APP_NAME, GUIDE_PATH, OG_IMAGE, PRICE, SITE_URL, SYSTEM_DATA_GUIDE_PATH, pages } from "@/lib/site";
+import { APP_NAME, CACHE_GUIDE_PATH, GUIDE_PATH, OG_IMAGE, PRICE, SITE_URL, SYSTEM_DATA_GUIDE_PATH, pages } from "@/lib/site";
 
 const path = SYSTEM_DATA_GUIDE_PATH;
 const title = "How to reduce System Data on a Mac: 8 safe fixes";
@@ -250,6 +250,10 @@ export default function GuidePage() {
         Open <strong>Settings</strong>, then <strong>Privacy and security</strong>, then{" "}
         <strong>Delete browsing data</strong>. Select only <strong>Cached images and files</strong> so you stay signed
         in.
+      </p>
+      <p>
+        For every app, browser and system cache, read our guide on{" "}
+        <Link href={CACHE_GUIDE_PATH}>how to clear cache on a Mac</Link>.
       </p>
 
       <h3>4. Delete old log files</h3>

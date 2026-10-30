@@ -11,6 +11,7 @@ const prose =
   "[&_h2]:mt-12 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-tight [&_h2]:text-black sm:[&_h2]:text-3xl " +
   "[&_h3]:mt-8 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:tracking-tight [&_h3]:text-black " +
   "[&_h4]:mt-6 [&_h4]:font-semibold [&_h4]:text-black " +
+  "[&_h5]:mt-5 [&_h5]:text-sm [&_h5]:font-semibold [&_h5]:tracking-wide [&_h5]:text-gray-600 [&_h5]:uppercase " +
   "[&_p]:mt-4 [&_ul]:mt-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:mt-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:mt-2 " +
   "[&_strong]:font-semibold [&_strong]:text-black " +
   "[&_table]:w-full [&_table]:text-left [&_table]:text-sm sm:[&_table]:text-base [&_thead]:text-gray-500 " +

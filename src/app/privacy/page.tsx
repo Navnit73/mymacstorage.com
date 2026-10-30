@@ -42,8 +42,14 @@ export default function PrivacyPage() {
 
       <h2>Data the website handles</h2>
       <p>
-        This website sets no cookies and runs no analytics. It loads product screenshots from an image delivery
-        service, which, like any web server, receives your IP address and browser details to send you the images.
+        When you visit this website, our server logs each page you request along with your IP address, browser and
+        device type, the page that referred you, and the time. We use these logs to count visits, see which pages help
+        people, and spot abusive or automated traffic. We delete them after 90 days.
+      </p>
+      <p>
+        The website sets one cookie, a random ID that lets us tell a returning visitor from a new one. It holds nothing
+        about you and isn&rsquo;t shared with anyone. It loads product screenshots from an image delivery service,
+        which, like any web server, receives your IP address and browser details to send you the images.
       </p>
 
       <h2>Purchases</h2>

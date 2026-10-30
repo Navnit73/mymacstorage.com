@@ -3,7 +3,8 @@ import { SITE_URL } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: "*", allow: "/" },
+    // Crawlers following Buy buttons would otherwise open a checkout session on every visit.
+    rules: { userAgent: "*", allow: "/", disallow: ["/api/", "/checkout/"] },
     sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

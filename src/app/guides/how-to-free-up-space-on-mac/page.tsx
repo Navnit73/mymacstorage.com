@@ -3,6 +3,7 @@ import { ContentPage } from "@/components/content-page";
 import { innerPageGraph, isoDateTime, pageMetadata } from "@/lib/seo";
 import {
   APP_NAME,
+  CACHE_GUIDE_PATH,
   DUPLICATES_GUIDE_PATH,
   GUIDE_PATH,
   LARGE_FILES_GUIDE_PATH,
@@ -319,6 +320,10 @@ export default function GuidePage() {
         Open <strong>Settings</strong>, then <strong>Privacy and security</strong>, then{" "}
         <strong>Delete browsing data</strong>. Select only <strong>Cached images and files</strong> so you stay signed
         in to your accounts.
+      </p>
+      <p>
+        For every app, browser and system cache, read our guide on{" "}
+        <Link href={CACHE_GUIDE_PATH}>how to clear cache on a Mac</Link>.
       </p>
 
       <h3>11. Delete local Time Machine snapshots</h3>
