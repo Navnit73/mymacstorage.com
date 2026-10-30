@@ -8,8 +8,9 @@ export const REFUND_DAYS = 14;
 /** Swap for the real checkout link once it exists; every Buy and Download button reads it. */
 export const CHECKOUT_URL = "/#pricing";
 
-export const SITE_TITLE = "Disk Cleanup for Mac: Storage Cleaner & Analyzer | MyMacStorage";
-export const SITE_DESCRIPTION = `Disk cleanup for Mac, done safely. One scan finds caches, duplicates and app leftovers, then clears them to the Trash. ${PRICE} once, no subscription.`;
+export const SITE_TITLE = "Mac Disk Cleanup: Free Up Storage Space Safely | MyMacStorage";
+export const SITE_DESCRIPTION =
+  "Mac storage full? Free up gigabytes in minutes. One scan finds caches, duplicates and app leftovers, and everything goes to the Trash, so it's undoable.";
 
 export const OG_IMAGE =
   "https://res.cloudinary.com/dipzpwbbk/image/upload/c_crop,x_0,y_0,w_2460,h_1633/c_fill,g_north,w_1200,h_630/v1793287028/overview_lfyfha.jpg";
