@@ -58,6 +58,9 @@ export type EmailLog = {
   resendId: string | null;
   orderId: string | null;
   grantId: string | null;
+  /** Kept so an email sent before its payment.succeeded arrives can still be matched to the order later. */
+  customerId?: string | null;
+  licenseKeyId?: string | null;
   status: "sent" | "failed";
   error?: string;
   at: Date;
@@ -129,7 +132,13 @@ async function connect() {
   if (!uri) throw new Error("MONGODB_URI is not set");
   const client = await new MongoClient(uri, { maxPoolSize: 10, serverSelectionTimeoutMS: 5000 }).connect();
   const database = client.db();
-  await ensureIndexes(database);
+  try {
+    await ensureIndexes(database);
+  } catch (error) {
+    // db() retries on the next call, so close this pool rather than leak one per attempt.
+    await client.close().catch(() => {});
+    throw error;
+  }
   return database;
 }
 
@@ -144,10 +153,12 @@ async function ensureIndexes(database: Db) {
     database.collection("orders").createIndex({ paymentId: 1 }, { sparse: true }),
     database.collection("orders").createIndex({ customerId: 1, createdAt: -1 }),
     database.collection("emails").createIndex({ at: -1 }),
+    database.collection("emails").createIndex({ grantId: 1, status: 1 }),
     database.collection("logs").createIndex({ at: 1 }, { expireAfterSeconds: ninetyDays }),
     database.collection("admins").createIndex({ email: 1 }, { unique: true }),
     database.collection("admin_sessions").createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
     database.collection("login_failures").createIndex({ at: 1 }, { expireAfterSeconds: 60 * 15 }),
     database.collection("login_failures").createIndex({ ip: 1, at: -1 }),
+    database.collection("login_failures").createIndex({ email: 1, at: -1 }),
   ]);
 }

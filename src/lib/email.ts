@@ -20,13 +20,24 @@ type PurchaseEmail = {
   idempotencyKey: string;
   orderId?: string | null;
   grantId?: string | null;
+  customerId?: string | null;
+  licenseKeyId?: string | null;
 };
 
 /**
  * Emails the buyer their download links and licence key through Resend, records the attempt in the `emails`
  * collection and returns Resend's email ID. Throws if Resend rejects it.
  */
-export async function sendPurchaseEmail({ to, name, licenseKey, idempotencyKey, orderId, grantId }: PurchaseEmail) {
+export async function sendPurchaseEmail({
+  to,
+  name,
+  licenseKey,
+  idempotencyKey,
+  orderId,
+  grantId,
+  customerId,
+  licenseKeyId,
+}: PurchaseEmail) {
   const macUrl = requireEnv("MAC_DOWNLOAD_URL");
   const windowsUrl = process.env.WINDOWS_DOWNLOAD_URL;
   const greeting = name ? `Hi ${escapeHtml(name)},` : "Hi,";
@@ -66,7 +77,15 @@ export async function sendPurchaseEmail({ to, name, licenseKey, idempotencyKey, 
     { idempotencyKey },
   );
 
-  const record = { to, subject, kind: "purchase" as const, orderId: orderId ?? null, grantId: grantId ?? null };
+  const record = {
+    to,
+    subject,
+    kind: "purchase" as const,
+    orderId: orderId ?? null,
+    grantId: grantId ?? null,
+    customerId: customerId ?? null,
+    licenseKeyId: licenseKeyId ?? null,
+  };
   const emails = await collection("emails");
   if (error || !data) {
     const message = error ? `${error.name}: ${error.message}` : "Resend returned no data";

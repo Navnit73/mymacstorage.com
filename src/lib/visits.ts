@@ -38,12 +38,15 @@ const NAMED_BOTS: [name: string, pattern: RegExp][] = [
   ["Dodo webhook", /svix|standard-webhooks/i],
 ];
 const GENERIC_BOT = /bot|crawl|spider|slurp|fetcher|scanner|preview|monitor/i;
+// Real devices whose names contain "bot", stripped before the generic check.
+const BOT_LOOKALIKES = /cubot/gi;
+export const UNNAMED_BOT = "Other bot";
 
 /** Names the crawler behind a user agent, or returns null for what looks like a person's browser. */
 export function detectBot(ua: string | null, nextSaysBot: boolean): string | null {
   if (!ua) return "No user agent";
   for (const [name, pattern] of NAMED_BOTS) if (pattern.test(ua)) return name;
-  if (nextSaysBot || GENERIC_BOT.test(ua)) return "Other bot";
+  if (nextSaysBot || GENERIC_BOT.test(ua.replace(BOT_LOOKALIKES, ""))) return UNNAMED_BOT;
   return null;
 }
 

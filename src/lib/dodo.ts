@@ -10,5 +10,6 @@ let client: DodoPayments | undefined;
  * fail `next build` on any machine without secrets. Also reads DODO_PAYMENTS_WEBHOOK_KEY.
  */
 export function dodo() {
-  return (client ??= new DodoPayments({ environment: dodoEnvironment }));
+  // The SDK throws if given both a base URL and an environment; DODO_PAYMENTS_BASE_URL (a mock server, say) wins.
+  return (client ??= new DodoPayments(process.env.DODO_PAYMENTS_BASE_URL ? {} : { environment: dodoEnvironment }));
 }

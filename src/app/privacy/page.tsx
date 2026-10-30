@@ -47,9 +47,15 @@ export default function PrivacyPage() {
         people, and spot abusive or automated traffic. We delete them after 90 days.
       </p>
       <p>
-        The website sets one cookie, a random ID that lets us tell a returning visitor from a new one. It holds nothing
-        about you and isn&rsquo;t shared with anyone. It loads product screenshots from an image delivery service,
-        which, like any web server, receives your IP address and browser details to send you the images.
+        Our own logging sets one cookie, a random ID that lets us tell a returning visitor from a new one. It holds
+        nothing about you and isn&rsquo;t shared with anyone.
+      </p>
+      <p>
+        The website also uses two analytics services. Microsoft Clarity records how visitors use pages, such as clicks
+        and scrolling, and sets its own cookies to do so. Ahrefs Web Analytics counts visits without cookies. Each
+        handles that data under its own privacy policy. The website also loads product screenshots from an image
+        delivery service, which, like any web server, receives your IP address and browser details to send you the
+        images.
       </p>
 
       <h2>Purchases</h2>

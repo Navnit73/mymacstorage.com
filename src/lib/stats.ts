@@ -8,9 +8,18 @@ export async function getStats(days: number) {
 
   const [traffic, topBots, topPages, perDay, orderStatuses, revenue] = await Promise.all([
     visits
-      .aggregate<{ _id: boolean; requests: number; visitors: string[] }>([
+      // Distinct visitors are counted in two passes: $addToSet would build one array of every visitor ID, which
+      // fails once it passes MongoDB's 16 MB document limit.
+      .aggregate<{ _id: boolean; requests: number; visitors: number }>([
         { $match: { at: { $gte: since } } },
-        { $group: { _id: "$isBot", requests: { $sum: 1 }, visitors: { $addToSet: "$visitorId" } } },
+        { $group: { _id: { isBot: "$isBot", visitorId: "$visitorId" }, requests: { $sum: 1 } } },
+        {
+          $group: {
+            _id: "$_id.isBot",
+            requests: { $sum: "$requests" },
+            visitors: { $sum: { $cond: [{ $ne: ["$_id.visitorId", null] }, 1, 0] } },
+          },
+        },
       ])
       .toArray(),
     visits
@@ -25,8 +34,9 @@ export async function getStats(days: number) {
     visits
       .aggregate<{ path: string; views: number; visitors: number }>([
         { $match: { at: { $gte: since }, isBot: false, method: "GET", path: { $not: /^\/api\// } } },
-        { $group: { _id: "$path", views: { $sum: 1 }, visitors: { $addToSet: "$visitorId" } } },
-        { $project: { _id: 0, path: "$_id", views: 1, visitors: { $size: "$visitors" } } },
+        { $group: { _id: { path: "$path", visitorId: "$visitorId" }, views: { $sum: 1 } } },
+        { $group: { _id: "$_id.path", views: { $sum: "$views" }, visitors: { $sum: 1 } } },
+        { $project: { _id: 0, path: "$_id", views: 1, visitors: 1 } },
         { $sort: { views: -1 } },
         { $limit: 20 },
       ])
@@ -68,7 +78,7 @@ export async function getStats(days: number) {
   return {
     since,
     days,
-    humans: { requests: humans?.requests ?? 0, visitors: humans?.visitors.filter(Boolean).length ?? 0 },
+    humans: { requests: humans?.requests ?? 0, visitors: humans?.visitors ?? 0 },
     bots: { requests: bots?.requests ?? 0 },
     topBots,
     topPages,

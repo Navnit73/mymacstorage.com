@@ -3,7 +3,7 @@ import { collection } from "@/lib/db";
 import { dodo } from "@/lib/dodo";
 import { logger } from "@/lib/logger";
 import { SITE_URL } from "@/lib/site";
-import { detectBot, VISITOR_COOKIE } from "@/lib/visits";
+import { detectBot, UNNAMED_BOT, VISITOR_COOKIE } from "@/lib/visits";
 
 const log = logger("checkout");
 
@@ -12,9 +12,10 @@ const log = logger("checkout");
  * order and sends the buyer to it. The product ID comes from the server, never from the request.
  */
 export async function GET(request: NextRequest) {
-  // Crawlers that ignore robots.txt would otherwise open a Dodo session on every pass.
+  // Crawlers that ignore robots.txt would otherwise open a Dodo session on every pass. Only named bots are turned
+  // away: the generic pattern can misfire on a real browser, and a lost sale costs more than a stray session.
   const bot = detectBot(request.headers.get("user-agent"), userAgent(request).isBot);
-  if (bot) return Response.redirect(`${SITE_URL}/#pricing`, 303);
+  if (bot && bot !== UNNAMED_BOT) return Response.redirect(`${SITE_URL}/#pricing`, 303);
 
   const productId = process.env.DODO_PRODUCT_ID;
   if (!productId) {

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { NavigationBeacon } from "@/components/navigation-beacon";
 import { APP_NAME, OG_IMAGE, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         {children}
+        <NavigationBeacon />
         <Script src="https://analytics.ahrefs.com/analytics.js" data-key="Sq3+cAUB6rNqzaWgQlGO6g" />
         <Script id="microsoft-clarity">
           {`(function(c,l,a,r,i,t,y){

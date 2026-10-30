@@ -16,13 +16,12 @@ export function logger(scope: string) {
 }
 
 async function write(level: LogEntry["level"], scope: string, message: string, data?: Data) {
-  const entry: LogEntry = { at: new Date(), level, scope, message, ...(data && { data: serialize(data) }) };
-  const line = JSON.stringify(entry);
-  if (level === "error") console.error(line);
-  else if (level === "warn") console.warn(line);
-  else console.log(line);
-
   try {
+    const entry: LogEntry = { at: new Date(), level, scope, message, ...(data && { data: serialize(data) }) };
+    const line = JSON.stringify(entry);
+    if (level === "error") console.error(line);
+    else if (level === "warn") console.warn(line);
+    else console.log(line);
     await (await collection("logs")).insertOne(entry);
   } catch (error) {
     console.error(JSON.stringify({ at: new Date(), level: "error", scope: "logger", message: String(error) }));

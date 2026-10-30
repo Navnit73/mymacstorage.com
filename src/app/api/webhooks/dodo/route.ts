@@ -122,10 +122,10 @@ async function recordPayment(payment: Payment, status: OrderStatus) {
 async function attachEarlyLicenceEmail(payment: Payment) {
   const emails = await collection("emails");
   const sent = await emails.findOne(
-    { to: payment.customer.email, kind: "purchase", status: "sent", orderId: null },
+    { customerId: payment.customer.customer_id, kind: "purchase", status: "sent", orderId: null },
     { sort: { at: -1 } },
   );
-  if (!sent) return;
+  if (!sent?.grantId) return;
 
   const orders = await collection("orders");
   const order = await orders.findOneAndUpdate(
@@ -133,7 +133,8 @@ async function attachEarlyLicenceEmail(payment: Payment) {
     {
       $set: {
         status: "fulfilled",
-        ...(sent.grantId && { grantId: sent.grantId }),
+        grantId: sent.grantId,
+        ...(sent.licenseKeyId && { licenseKeyId: sent.licenseKeyId }),
         ...(sent.resendId && { emailId: sent.resendId }),
         emailSentAt: sent.at,
         updatedAt: new Date(),
@@ -146,14 +147,19 @@ async function attachEarlyLicenceEmail(payment: Payment) {
 async function deliverLicence(grant: EntitlementGrant) {
   if (grant.status !== "Delivered" || !grant.license_key) return;
 
+  // Dodo can send both entitlement_grant.created and .delivered for one grant. One email per grant is enough;
+  // support can resend from the admin panel.
+  const emails = await collection("emails");
+  if (await emails.findOne({ grantId: grant.id, kind: "purchase", status: "sent" })) {
+    await log.info("Licence already emailed for this grant", { grantId: grant.id });
+    return;
+  }
+
   const customer = await dodo().customers.retrieve(grant.customer_id);
   const orders = await collection("orders");
-  // The grant doesn't name its payment, so it belongs to this customer's newest order without a licence yet. The
-  // grant can also arrive before payment.succeeded; then no order matches and the email log alone records the send.
-  const order = await orders.findOne(
-    { customerId: grant.customer_id, grantId: { $exists: false } },
-    { sort: { createdAt: -1 } },
-  );
+  // The grant doesn't name its payment, so it belongs to this customer's newest paid order still waiting for a
+  // licence. If payment.succeeded hasn't arrived yet, no order matches; attachEarlyLicenceEmail links it later.
+  const order = await orders.findOne({ customerId: grant.customer_id, status: "paid" }, { sort: { createdAt: -1 } });
 
   const emailId = await sendPurchaseEmail({
     to: customer.email,
@@ -162,6 +168,8 @@ async function deliverLicence(grant: EntitlementGrant) {
     idempotencyKey: `licence-email/${grant.id}`,
     orderId: order?._id.toString() ?? null,
     grantId: grant.id,
+    customerId: grant.customer_id,
+    licenseKeyId: grant.license_key.id,
   });
 
   if (order) {

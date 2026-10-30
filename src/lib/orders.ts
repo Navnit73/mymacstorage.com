@@ -6,9 +6,11 @@ import { sendPurchaseEmail } from "@/lib/email";
  * Sends a buyer their download links and licence key again, for "I never got the email" support requests. `email`
  * is the address they paid with; `to` sends it somewhere else. Returns null when no order for that email has a key.
  */
-export async function resendLicenceEmail(email: string, to = email) {
+export async function resendLicenceEmail(email: string, to = email.trim()) {
+  // Case-insensitive: Dodo keeps the address as the buyer typed it.
+  const exact = new RegExp(`^${email.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i");
   const order = await (await collection("orders")).findOne(
-    { email, licenseKeyId: { $exists: true } },
+    { email: exact, licenseKeyId: { $exists: true } },
     { sort: { createdAt: -1 } },
   );
   if (!order?.licenseKeyId) return null;
@@ -22,6 +24,8 @@ export async function resendLicenceEmail(email: string, to = email) {
     idempotencyKey: `licence-resend/${order._id}/${Date.now()}`,
     orderId: order._id.toString(),
     grantId: order.grantId ?? null,
+    customerId: order.customerId ?? null,
+    licenseKeyId: order.licenseKeyId,
   });
   return { to, emailId };
 }

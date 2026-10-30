@@ -12,7 +12,10 @@ export const ADMIN_LOGIN_PATH = `${ADMIN_PATH}/login`;
 
 const COOKIE = "mms_admin";
 const SESSION_DAYS = 7;
-const MAX_FAILURES = 10; // per IP, within the 15 minutes login_failures keeps them
+// Within the 15 minutes login_failures keeps them. The IP comes from X-Forwarded-For, which a client can forge
+// unless the host overwrites it, so the per-account cap also stops guessing spread across many fake IPs.
+const MAX_FAILURES_PER_IP = 10;
+const MAX_FAILURES_PER_EMAIL = 30;
 const KEY_LENGTH = 64;
 
 const log = logger("admin-auth");
@@ -51,7 +54,11 @@ export async function signIn(emailInput: string, password: string): Promise<Sign
   const { ip, userAgent } = await requestInfo();
   const failures = await collection("login_failures");
 
-  if ((await failures.countDocuments({ ip: ip ?? "unknown" })) >= MAX_FAILURES) {
+  const [byIp, byEmail] = await Promise.all([
+    failures.countDocuments({ ip: ip ?? "unknown" }),
+    failures.countDocuments({ email }),
+  ]);
+  if (byIp >= MAX_FAILURES_PER_IP || byEmail >= MAX_FAILURES_PER_EMAIL) {
     await log.warn("Admin sign-in blocked: too many failures", { ip, email });
     return { ok: false, error: "Too many failed attempts. Try again in 15 minutes." };
   }
@@ -81,7 +88,7 @@ export async function signIn(emailInput: string, password: string): Promise<Sign
     expiresAt,
   });
   await (await collection("admins")).updateOne({ _id: admin._id }, { $set: { lastLoginAt: now } });
-  await failures.deleteMany({ ip: ip ?? "unknown" });
+  await failures.deleteMany({ $or: [{ ip: ip ?? "unknown" }, { email }] });
 
   (await cookies()).set(COOKIE, token, {
     httpOnly: true,
