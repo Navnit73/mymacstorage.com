@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
-// Same mark as the Logo component and icon.svg, at Apple touch icon size.
+// Samee mark as the Logo component and icon.svg, at Apple touch icon size.
 export default function AppleIcon() {
   return new ImageResponse(
     (
