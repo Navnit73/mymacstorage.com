@@ -1,16 +1,15 @@
-import { MongoServerError } from "mongodb";
+import { MongoServerError, type ObjectId } from "mongodb";
 import type { EntitlementGrant } from "dodopayments/resources/entitlements/grants";
 import type { Payment } from "dodopayments/resources/payments";
 import { collection, type OrderStatus } from "@/lib/db";
 import { dodo } from "@/lib/dodo";
-import { sendPurchaseEmail } from "@/lib/email";
 import { logger } from "@/lib/logger";
 
 const log = logger("webhook");
 
 /**
  * Dodo calls this for payment and licence events. Payments update the order; when the licence key for a paid order
- * is issued, the buyer is emailed the download links and the key.
+ * is issued, the order is marked fulfilled. Dodo emails the buyer the receipt and licence key itself.
  *
  * The key arrives on `entitlement_grant.created` (auto-fulfilled keys) or `entitlement_grant.delivered`
  * (a key fulfilled or restored later), not on `payment.succeeded`. Subscribe to those two plus `payment.succeeded`,
@@ -61,7 +60,7 @@ export async function POST(request: Request) {
         break;
       case "entitlement_grant.created":
       case "entitlement_grant.delivered":
-        await deliverLicence(event.data);
+        await recordLicence(event.data);
         break;
     }
     await events.updateOne({ _id: webhookId }, { $set: { processedAt: new Date() }, $unset: { error: "" } });
@@ -115,76 +114,59 @@ async function recordPayment(payment: Payment, status: OrderStatus) {
   await orders.updateOne({ ...filter, status: { $nin: KEEP[status] } }, { $set: { status } });
   await log.info(`Payment ${status}`, { paymentId: payment.payment_id, checkoutSessionId: payment.checkout_session_id });
 
-  if (status === "paid") await attachEarlyLicenceEmail(payment);
+  if (status === "paid") await attachEarlyGrant(payment);
 }
 
-/** The licence email can go out before payment.succeeded arrives. If it did, mark this order fulfilled now. */
-async function attachEarlyLicenceEmail(payment: Payment) {
-  const emails = await collection("emails");
-  const sent = await emails.findOne(
-    { customerId: payment.customer.customer_id, kind: "purchase", status: "sent", orderId: null },
-    { sort: { at: -1 } },
-  );
-  if (!sent?.grantId) return;
+/** Dodo can issue the licence before payment.succeeded arrives. If it did, attach it to this order now. */
+async function attachEarlyGrant(payment: Payment) {
+  const orders = await collection("orders");
+  const order = await orders.findOne({ paymentId: payment.payment_id, status: "paid" });
+  if (!order) return;
+
+  const grants = (await (await collection("webhook_events"))
+    .find({ type: { $in: LICENCE_EVENTS }, "payload.data.customer_id": payment.customer.customer_id })
+    .sort({ receivedAt: -1 })
+    .toArray()).map((e) => (e.payload as { data: EntitlementGrant }).data);
+
+  for (const grant of grants) {
+    if (grant.status !== "Delivered" || !grant.license_key) continue;
+    if (await orders.findOne({ grantId: grant.id })) continue;
+    await markFulfilled(order._id, grant);
+    return;
+  }
+}
+
+const LICENCE_EVENTS = ["entitlement_grant.created", "entitlement_grant.delivered"];
+
+/** Dodo emails the buyer their licence key itself; this only records which order it belongs to. */
+async function recordLicence(grant: EntitlementGrant) {
+  if (grant.status !== "Delivered" || !grant.license_key) return;
 
   const orders = await collection("orders");
-  const order = await orders.findOneAndUpdate(
-    { paymentId: payment.payment_id, grantId: { $exists: false } },
+  // Dodo can send both entitlement_grant.created and .delivered for one grant.
+  if (await orders.findOne({ grantId: grant.id })) return;
+
+  // The grant doesn't name its payment, so it belongs to this customer's newest paid order still waiting for a
+  // licence. If payment.succeeded hasn't arrived yet, no order matches; attachEarlyGrant links it later.
+  const order = await orders.findOne({ customerId: grant.customer_id, status: "paid" }, { sort: { createdAt: -1 } });
+  if (!order) {
+    await log.info("Licence issued before its payment was recorded", { grantId: grant.id });
+    return;
+  }
+  await markFulfilled(order._id, grant);
+}
+
+async function markFulfilled(orderId: ObjectId, grant: EntitlementGrant) {
+  await (await collection("orders")).updateOne(
+    { _id: orderId },
     {
       $set: {
         status: "fulfilled",
-        grantId: sent.grantId,
-        ...(sent.licenseKeyId && { licenseKeyId: sent.licenseKeyId }),
-        ...(sent.resendId && { emailId: sent.resendId }),
-        emailSentAt: sent.at,
+        grantId: grant.id,
+        ...(grant.license_key && { licenseKeyId: grant.license_key.id }),
         updatedAt: new Date(),
       },
     },
   );
-  if (order) await emails.updateOne({ _id: sent._id }, { $set: { orderId: order._id.toString() } });
-}
-
-async function deliverLicence(grant: EntitlementGrant) {
-  if (grant.status !== "Delivered" || !grant.license_key) return;
-
-  // Dodo can send both entitlement_grant.created and .delivered for one grant. One email per grant is enough;
-  // support can resend from the admin panel.
-  const emails = await collection("emails");
-  if (await emails.findOne({ grantId: grant.id, kind: "purchase", status: "sent" })) {
-    await log.info("Licence already emailed for this grant", { grantId: grant.id });
-    return;
-  }
-
-  const customer = await dodo().customers.retrieve(grant.customer_id);
-  const orders = await collection("orders");
-  // The grant doesn't name its payment, so it belongs to this customer's newest paid order still waiting for a
-  // licence. If payment.succeeded hasn't arrived yet, no order matches; attachEarlyLicenceEmail links it later.
-  const order = await orders.findOne({ customerId: grant.customer_id, status: "paid" }, { sort: { createdAt: -1 } });
-
-  const emailId = await sendPurchaseEmail({
-    to: customer.email,
-    name: customer.name,
-    licenseKey: grant.license_key.key,
-    idempotencyKey: `licence-email/${grant.id}`,
-    orderId: order?._id.toString() ?? null,
-    grantId: grant.id,
-    customerId: grant.customer_id,
-    licenseKeyId: grant.license_key.id,
-  });
-
-  if (order) {
-    await orders.updateOne(
-      { _id: order._id },
-      {
-        $set: {
-          status: "fulfilled",
-          grantId: grant.id,
-          licenseKeyId: grant.license_key.id,
-          emailId,
-          emailSentAt: new Date(),
-          updatedAt: new Date(),
-        },
-      },
-    );
-  }
+  await log.info("Licence issued", { orderId: orderId.toString(), grantId: grant.id });
 }

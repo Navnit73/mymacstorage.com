@@ -26,9 +26,10 @@ export function proxy(request: NextRequest, event: NextFetchEvent) {
 export const config = {
   matcher: [
     {
-      // Everything except build output and static files. robots.txt and sitemap.xml stay in: bots fetching them
+      // Everything except build output and static files. The Mac app's API is left out: its heartbeats would swamp
+      // the visit log, and it keeps its own records. robots.txt and sitemap.xml stay in: bots fetching them
       // are worth seeing.
-      source: "/((?!_next/static|_next/image|icon|apple-icon|api/admin|api/track|navnit_admin|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|css|js|map|woff2?)$).*)",
+      source: "/((?!_next/static|_next/image|icon|apple-icon|api/admin|api/app|api/track|navnit_admin|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|css|js|map|woff2?)$).*)",
       // Link prefetches aren't visits. In-app navigations (RSC requests) are skipped too: <NavigationBeacon> logs
       // every one of them, including those served from the prefetch cache that never reach the server.
       missing: [

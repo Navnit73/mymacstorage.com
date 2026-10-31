@@ -3,8 +3,7 @@ import type { Filter } from "mongodb";
 import { Suspense } from "react";
 import { requireAdmin } from "@/lib/admin-auth";
 import { collection, type Order, type OrderStatus } from "@/lib/db";
-import { ResendButton } from "../../_components/resend-button";
-import { Badge, Card, FilterLinks, formatDate, formatMoney, PageTitle, PanelSkeleton, Table, Td } from "../../_components/ui";
+import { Badge, FilterLinks, formatDate, formatMoney, PageTitle, PanelSkeleton, Table, Td } from "../../_components/ui";
 
 export const metadata: Metadata = { title: "Orders" };
 
@@ -37,10 +36,7 @@ async function Orders({ searchParams }: { searchParams: Promise<Record<string, s
   if (status) filter.status = status;
   if (emailMatch) filter.email = emailMatch;
 
-  const [orders, emails] = await Promise.all([
-    (await collection("orders")).find(filter).sort({ createdAt: -1 }).limit(200).toArray(),
-    (await collection("emails")).find(emailMatch ? { to: emailMatch } : {}).sort({ at: -1 }).limit(50).toArray(),
-  ]);
+  const orders = await (await collection("orders")).find(filter).sort({ createdAt: -1 }).limit(200).toArray();
 
   return (
     <>
@@ -72,7 +68,7 @@ async function Orders({ searchParams }: { searchParams: Promise<Record<string, s
         </button>
       </form>
 
-      <Table head={["Created", "Status", "Buyer", "Amount", "Licence email", "IDs"]} empty={orders.length === 0}>
+      <Table head={["Created", "Status", "Buyer", "Amount", "Licence", "IDs"]} empty={orders.length === 0}>
         {orders.map((o) => (
           <tr key={o._id.toString()} className="hover:bg-gray-50">
             <Td className="whitespace-nowrap text-gray-600">{formatDate(o.createdAt)}</Td>
@@ -85,15 +81,10 @@ async function Orders({ searchParams }: { searchParams: Promise<Record<string, s
             </Td>
             <Td className="whitespace-nowrap tabular-nums">{formatMoney(o.amount, o.currency)}</Td>
             <Td>
-              {o.emailSentAt ? (
-                <div className="whitespace-nowrap text-xs text-gray-600">Sent {formatDate(o.emailSentAt)}</div>
+              {o.licenseKeyId ? (
+                <div className="font-mono text-xs text-gray-600" title="Licence key ID">{o.licenseKeyId}</div>
               ) : (
-                <div className="text-xs text-gray-500">Not sent</div>
-              )}
-              {o.email && o.licenseKeyId && (
-                <div className="mt-1.5">
-                  <ResendButton email={o.email} />
-                </div>
+                <div className="text-xs text-gray-500">Not issued</div>
               )}
             </Td>
             <Td className="font-mono text-xs text-gray-500">
@@ -103,22 +94,6 @@ async function Orders({ searchParams }: { searchParams: Promise<Record<string, s
           </tr>
         ))}
       </Table>
-
-      <Card title="Emails sent" className="mt-8">
-        <Table head={["Time", "To", "Status", "Resend ID"]} empty={emails.length === 0}>
-          {emails.map((e) => (
-            <tr key={e._id.toString()}>
-              <Td className="whitespace-nowrap text-gray-600">{formatDate(e.at)}</Td>
-              <Td>{e.to}</Td>
-              <Td>
-                <Badge tone={e.status === "sent" ? "lime" : "dark"}>{e.status}</Badge>
-                {e.error && <div className="mt-1 text-xs text-gray-700">{e.error}</div>}
-              </Td>
-              <Td className="font-mono text-xs text-gray-500">{e.resendId ?? "—"}</Td>
-            </tr>
-          ))}
-        </Table>
-      </Card>
     </>
   );
 }

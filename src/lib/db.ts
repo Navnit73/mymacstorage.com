@@ -22,7 +22,7 @@ export type Visit = {
 
 export type OrderStatus = "checkout_created" | "paid" | "failed" | "cancelled" | "fulfilled";
 
-/** A purchase, from the moment the buyer is sent to Dodo until their licence email goes out. */
+/** A purchase, from the moment the buyer is sent to Dodo until their licence key is issued. */
 export type Order = {
   checkoutSessionId: string;
   status: OrderStatus;
@@ -35,8 +35,6 @@ export type Order = {
   currency?: string;
   grantId?: string;
   licenseKeyId?: string;
-  emailId?: string;
-  emailSentAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -49,21 +47,6 @@ export type WebhookEvent = {
   receivedAt: Date;
   processedAt?: Date;
   error?: string;
-};
-
-export type EmailLog = {
-  to: string;
-  subject: string;
-  kind: "purchase";
-  resendId: string | null;
-  orderId: string | null;
-  grantId: string | null;
-  /** Kept so an email sent before its payment.succeeded arrives can still be matched to the order later. */
-  customerId?: string | null;
-  licenseKeyId?: string | null;
-  status: "sent" | "failed";
-  error?: string;
-  at: Date;
 };
 
 export type LogEntry = {
@@ -101,15 +84,84 @@ export type LoginFailure = {
   at: Date;
 };
 
+/** One install of the Mac app, keyed by the random device ID the app generates on first launch and keeps. */
+export type AppDevice = {
+  _id: string;
+  firstSeenAt: Date;
+  lastSeenAt: Date;
+  appVersion: string;
+  build: number;
+  channel: ReleaseChannel;
+  // The rest are set once the app reports them, and keep their last value when a heartbeat leaves them out.
+  /** The app session (one launch) of the latest heartbeat. */
+  sessionId?: string;
+  osVersion?: string;
+  model?: string;
+  arch?: string;
+  locale?: string;
+  country?: string;
+  licensed?: boolean;
+  launches: number;
+};
+
+/** One device seen on one UTC day. Counted for daily, weekly and monthly active users. */
+export type AppActivity = {
+  _id: string;
+  day: string;
+  deviceId: string;
+  appVersion: string;
+  at: Date;
+};
+
+/** One feature use or other event the app reports, e.g. `scan.completed`. */
+export type AppEvent = {
+  /** When it happened on the device. */
+  at: Date;
+  receivedAt: Date;
+  deviceId: string;
+  sessionId: string | null;
+  appVersion: string;
+  name: string;
+  props?: Record<string, string | number | boolean | null>;
+};
+
+export type ReleaseChannel = "stable" | "beta";
+
+/** A build of the Mac app offered as an update. The app compares `build` (CFBundleVersion) to its own. */
+export type AppRelease = {
+  version: string;
+  build: number;
+  channel: ReleaseChannel;
+  title: string;
+  /** Release notes, Markdown or plain text. */
+  notes: string;
+  downloadUrl: string;
+  /** Byte length of the download; Sparkle wants it. */
+  size: number | null;
+  /** Sparkle EdDSA signature of the download (`sparkle:edSignature`). */
+  edSignature: string | null;
+  minimumSystemVersion: string | null;
+  /** The app should not let the user skip this one. */
+  critical: boolean;
+  /** Builds below this must update before they can be used. */
+  minimumSupportedBuild: number | null;
+  published: boolean;
+  publishedAt: Date;
+  createdAt: Date;
+};
+
 type Collections = {
   visits: Visit;
   orders: Order;
   webhook_events: WebhookEvent;
-  emails: EmailLog;
   logs: LogEntry;
   admins: Admin;
   admin_sessions: AdminSession;
   login_failures: LoginFailure;
+  app_devices: AppDevice;
+  app_activity: AppActivity;
+  app_events: AppEvent;
+  app_releases: AppRelease;
 };
 
 // Kept on globalThis so dev-mode hot reloads reuse one connection pool instead of opening a new one per edit.
@@ -152,13 +204,21 @@ async function ensureIndexes(database: Db) {
     database.collection("orders").createIndex({ checkoutSessionId: 1 }, { unique: true }),
     database.collection("orders").createIndex({ paymentId: 1 }, { sparse: true }),
     database.collection("orders").createIndex({ customerId: 1, createdAt: -1 }),
-    database.collection("emails").createIndex({ at: -1 }),
-    database.collection("emails").createIndex({ grantId: 1, status: 1 }),
+    database.collection("orders").createIndex({ grantId: 1 }, { sparse: true }),
+    database.collection("webhook_events").createIndex({ "payload.data.customer_id": 1, receivedAt: -1 }),
     database.collection("logs").createIndex({ at: 1 }, { expireAfterSeconds: ninetyDays }),
     database.collection("admins").createIndex({ email: 1 }, { unique: true }),
     database.collection("admin_sessions").createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
     database.collection("login_failures").createIndex({ at: 1 }, { expireAfterSeconds: 60 * 15 }),
     database.collection("login_failures").createIndex({ ip: 1, at: -1 }),
     database.collection("login_failures").createIndex({ email: 1, at: -1 }),
+    database.collection("app_devices").createIndex({ lastSeenAt: -1 }),
+    database.collection("app_activity").createIndex({ at: 1 }, { expireAfterSeconds: 60 * 60 * 24 * 400 }),
+    database.collection("app_activity").createIndex({ day: 1 }),
+    database.collection("app_events").createIndex({ receivedAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 * 180 }),
+    database.collection("app_events").createIndex({ name: 1, at: -1 }),
+    database.collection("app_events").createIndex({ deviceId: 1, at: -1 }),
+    database.collection("app_releases").createIndex({ channel: 1, published: 1, build: -1 }),
+    database.collection("app_releases").createIndex({ channel: 1, build: 1 }, { unique: true }),
   ]);
 }
