@@ -3,6 +3,14 @@ import { collection, type Visit } from "@/lib/db";
 
 export const VISITOR_COOKIE = "mms_vid";
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** The visitor cookie, or null if absent or not a UUID. The value is client-controlled, so anything else is dropped. */
+export function readVisitorId(request: NextRequest) {
+  const value = request.cookies.get(VISITOR_COOKIE)?.value;
+  return value && UUID.test(value) ? value : null;
+}
+
 // Checked in order, so specific names come before the generic patterns that would also match them.
 const NAMED_BOTS: [name: string, pattern: RegExp][] = [
   ["Googlebot", /googlebot|google-inspectiontool|storebot-google|googleother|adsbot-google|mediapartners-google/i],

@@ -89,29 +89,38 @@ async function recordPayment(payment: Payment, status: OrderStatus) {
     ? { checkoutSessionId: payment.checkout_session_id }
     : { paymentId: payment.payment_id };
 
-  await orders.updateOne(
-    filter,
-    {
-      $set: {
-        paymentId: payment.payment_id,
-        customerId: payment.customer.customer_id,
-        email: payment.customer.email,
-        name: payment.customer.name,
-        amount: payment.total_amount,
-        currency: payment.currency,
-        updatedAt: now,
-      },
-      $setOnInsert: {
-        checkoutSessionId: payment.checkout_session_id ?? `payment:${payment.payment_id}`,
-        status,
-        visitorId: (payment.metadata?.visitor_id as string | undefined) ?? null,
-        createdAt: now,
-      },
-    },
-    // Only a successful payment is worth an order the checkout route didn't save.
-    { upsert: status === "paid" },
+  const details = {
+    paymentId: payment.payment_id,
+    customerId: payment.customer.customer_id,
+    email: payment.customer.email,
+    name: payment.customer.name,
+    amount: payment.total_amount,
+    currency: payment.currency,
+    updatedAt: now,
+  };
+  // Details and status change together, and only when the status may change. A late failure for an earlier attempt
+  // must not replace the payment ID and amount of the attempt that succeeded.
+  const updated = await orders.updateOne(
+    { ...filter, status: { $nin: KEEP[status] } },
+    { $set: { ...details, status } },
   );
-  await orders.updateOne({ ...filter, status: { $nin: KEEP[status] } }, { $set: { status } });
+  // Only a successful payment is worth an order the checkout route didn't save. Filtering on the status above would
+  // make an existing fulfilled order look missing and the insert collide with it, so this is a separate step.
+  if (updated.matchedCount === 0 && status === "paid") {
+    await orders.updateOne(
+      filter,
+      {
+        $setOnInsert: {
+          ...details,
+          checkoutSessionId: payment.checkout_session_id ?? `payment:${payment.payment_id}`,
+          status,
+          visitorId: (payment.metadata?.visitor_id as string | undefined) ?? null,
+          createdAt: now,
+        },
+      },
+      { upsert: true },
+    );
+  }
   await log.info(`Payment ${status}`, { paymentId: payment.payment_id, checkoutSessionId: payment.checkout_session_id });
 
   if (status === "paid") await attachEarlyGrant(payment);

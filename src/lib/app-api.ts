@@ -23,8 +23,11 @@ export function rejectUnlessApp(request: Request) {
 
 /** Reads a JSON body, or null when it is missing, malformed, or larger than `maxBytes`. */
 export async function readJson(request: Request, maxBytes = 64 * 1024): Promise<Record<string, unknown> | null> {
+  // Refuse an oversized body from its declared length before buffering it; check the real size afterwards.
+  const declared = Number(request.headers.get("content-length"));
+  if (declared > maxBytes) return null;
   const text = await request.text().catch(() => "");
-  if (!text || text.length > maxBytes) return null;
+  if (!text || Buffer.byteLength(text) > maxBytes) return null;
   try {
     const value: unknown = JSON.parse(text);
     return value && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, unknown>) : null;
@@ -42,7 +45,8 @@ export function str(value: unknown, max = 128) {
 
 /** A non-negative integer, or null. Accepts numeric strings, since CFBundleVersion is a string in Info.plist. */
 export function int(value: unknown) {
-  const n = typeof value === "string" ? Number(value) : value;
+  // Number("") is 0, so a blank form field would otherwise read as the integer 0.
+  const n = typeof value === "string" ? (value.trim() ? Number(value) : null) : value;
   return typeof n === "number" && Number.isInteger(n) && n >= 0 ? n : null;
 }
 

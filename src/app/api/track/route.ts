@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import { recordVisit, VISITOR_COOKIE, visitFromRequest } from "@/lib/visits";
+import { readVisitorId, recordVisit, visitFromRequest } from "@/lib/visits";
 
 /**
  * Logs an in-app navigation. Next serves those from prefetched data without a request the proxy could see, so
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     return new Response(null, { status: 204 });
   }
 
-  const visit = visitFromRequest(request, request.cookies.get(VISITOR_COOKIE)?.value ?? null);
+  const visit = visitFromRequest(request, readVisitorId(request));
   await recordVisit({
     ...visit,
     method: "GET",

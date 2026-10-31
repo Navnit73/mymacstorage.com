@@ -1,5 +1,16 @@
 import { badRequest, channel, HEARTBEAT_SECONDS, id, int, readJson, rejectUnlessApp, str, updateFor } from "@/lib/app-api";
+import { MongoServerError } from "mongodb";
 import { collection } from "@/lib/db";
+
+/** Two heartbeats from a new device can race to insert it; the loser gets a duplicate-key error and should retry. */
+async function retryOnDuplicate<T>(run: () => Promise<T>): Promise<T> {
+  try {
+    return await run();
+  } catch (error) {
+    if (error instanceof MongoServerError && error.code === 11000) return run();
+    throw error;
+  }
+}
 
 /**
  * The app calls this on launch (`"event": "launch"`) and then every `nextHeartbeatSeconds` while it runs. It keeps
@@ -39,19 +50,23 @@ export async function POST(request: Request) {
   const activity = await collection("app_activity");
 
   const [, , update] = await Promise.all([
-    devices.updateOne(
-      { _id: deviceId },
-      {
-        $set: { lastSeenAt: now, appVersion, build, channel: ch, ...optional },
-        $setOnInsert: { firstSeenAt: now },
-        $inc: { launches: body.event === "launch" ? 1 : 0 },
-      },
-      { upsert: true },
+    retryOnDuplicate(() =>
+      devices.updateOne(
+        { _id: deviceId },
+        {
+          $set: { lastSeenAt: now, appVersion, build, channel: ch, ...optional },
+          $setOnInsert: { firstSeenAt: now },
+          $inc: { launches: body.event === "launch" ? 1 : 0 },
+        },
+        { upsert: true },
+      ),
     ),
-    activity.updateOne(
-      { _id: `${day}:${deviceId}` },
-      { $set: { appVersion, at: now }, $setOnInsert: { day, deviceId } },
-      { upsert: true },
+    retryOnDuplicate(() =>
+      activity.updateOne(
+        { _id: `${day}:${deviceId}` },
+        { $set: { appVersion, at: now }, $setOnInsert: { day, deviceId } },
+        { upsert: true },
+      ),
     ),
     updateFor(build, ch),
   ]);

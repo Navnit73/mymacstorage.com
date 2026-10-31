@@ -216,6 +216,7 @@ async function ensureIndexes(database: Db) {
     database.collection("app_activity").createIndex({ at: 1 }, { expireAfterSeconds: 60 * 60 * 24 * 400 }),
     database.collection("app_activity").createIndex({ day: 1 }),
     database.collection("app_events").createIndex({ receivedAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 * 180 }),
+    database.collection("app_events").createIndex({ at: -1 }),
     database.collection("app_events").createIndex({ name: 1, at: -1 }),
     database.collection("app_events").createIndex({ deviceId: 1, at: -1 }),
     database.collection("app_releases").createIndex({ channel: 1, published: 1, build: -1 }),

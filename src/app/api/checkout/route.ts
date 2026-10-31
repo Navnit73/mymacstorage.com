@@ -3,7 +3,7 @@ import { collection } from "@/lib/db";
 import { dodo } from "@/lib/dodo";
 import { logger } from "@/lib/logger";
 import { SITE_URL } from "@/lib/site";
-import { detectBot, UNNAMED_BOT, VISITOR_COOKIE } from "@/lib/visits";
+import { detectBot, readVisitorId, UNNAMED_BOT } from "@/lib/visits";
 
 const log = logger("checkout");
 
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     return new Response("Checkout is not available right now.", { status: 503 });
   }
 
-  const visitorId = request.cookies.get(VISITOR_COOKIE)?.value ?? null;
+  const visitorId = readVisitorId(request);
 
   try {
     const session = await dodo().checkoutSessions.create({

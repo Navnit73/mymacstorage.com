@@ -1,12 +1,12 @@
 import { NextResponse, type NextFetchEvent, type NextRequest } from "next/server";
-import { recordVisit, VISITOR_COOKIE, visitFromRequest } from "@/lib/visits";
+import { readVisitorId, recordVisit, VISITOR_COOKIE, visitFromRequest } from "@/lib/visits";
 
 /**
  * Logs every page and API request, from people and bots alike, to the `visits` collection. The write runs after the
  * response is sent, so it adds no latency. People get a first-party visitor cookie so repeat visits group together.
  */
 export function proxy(request: NextRequest, event: NextFetchEvent) {
-  const existingId = request.cookies.get(VISITOR_COOKIE)?.value ?? null;
+  const existingId = readVisitorId(request);
   const visit = visitFromRequest(request, existingId ?? crypto.randomUUID());
   event.waitUntil(recordVisit(visit));
 
