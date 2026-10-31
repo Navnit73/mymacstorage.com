@@ -1,6 +1,7 @@
+import { Price } from "@/components/price";
 import { ContentPage } from "@/components/content-page";
 import { innerPageGraph, pageMetadata } from "@/lib/seo";
-import { APP_NAME, PRICE, REFUND_DAYS, SUPPORT_EMAIL, pages } from "@/lib/site";
+import { APP_NAME, REFUND_DAYS, SUPPORT_EMAIL, pages } from "@/lib/site";
 
 const path = "/refund-policy";
 const title = "Refund policy";
@@ -20,7 +21,7 @@ export default function RefundPolicyPage() {
     >
       <h2>{REFUND_DAYS}-day money-back guarantee</h2>
       <p>
-        {APP_NAME} costs {PRICE} once. If you ask within {REFUND_DAYS} days of your purchase, we refund the full amount.
+        {APP_NAME} costs <Price /> once. If you ask within {REFUND_DAYS} days of your purchase, we refund the full amount.
         You don&rsquo;t need to give a reason.
       </p>
 

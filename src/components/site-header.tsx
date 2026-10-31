@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { CHECKOUT_URL } from "@/lib/site";
 import { Logo } from "./icons";
+import { Price } from "./price";
 
 const links = [
   { href: "/#inside", label: "Inside" },
@@ -15,7 +16,7 @@ const links = [
 // Ignore tiny scroll jitter (e.g. trackpad bounce) so the bar doesn't flicker.
 const SCROLL_DELTA_PX = 6;
 
-export function SiteHeader({ appName, price }: { appName: string; price: string }) {
+export function SiteHeader({ appName }: { appName: string }) {
   const [scrolled, setScrolled] = useState(false);
   const [scrollingDown, setScrollingDown] = useState(false);
   const [open, setOpen] = useState(false);
@@ -64,7 +65,7 @@ export function SiteHeader({ appName, price }: { appName: string; price: string 
               href={CHECKOUT_URL}
               className="rounded-xl bg-lime-600 px-4 py-2 font-medium text-white transition-colors hover:bg-lime-700"
             >
-              Buy for {price}
+              Buy for <Price />
             </a>
             <button
               type="button"

@@ -1,7 +1,9 @@
 import { userAgent, type NextRequest } from "next/server";
 import { collection } from "@/lib/db";
+import type { CheckoutSessionBillingAddress } from "dodopayments/resources/checkout-sessions";
 import { dodo } from "@/lib/dodo";
 import { logger } from "@/lib/logger";
+import { countryFromHeaders, hasOwnPrice } from "@/lib/pricing";
 import { SITE_URL } from "@/lib/site";
 import { detectBot, readVisitorId, UNNAMED_BOT } from "@/lib/visits";
 
@@ -24,11 +26,14 @@ export async function GET(request: NextRequest) {
   }
 
   const visitorId = readVisitorId(request);
+  // Tell Dodo the same country the page priced for, so the checkout charges the amount the buyer was shown.
+  const country = countryFromHeaders(request.headers);
 
   try {
     const session = await dodo().checkoutSessions.create({
       product_cart: [{ product_id: productId, quantity: 1 }],
       return_url: `${SITE_URL}/checkout/success`,
+      ...(hasOwnPrice(country) && { billing_address: { country: country as CheckoutSessionBillingAddress["country"] } }),
       ...(visitorId && { metadata: { visitor_id: visitorId } }),
     });
     if (!session.checkout_url) throw new Error("Dodo returned no checkout_url");

@@ -1,7 +1,8 @@
+import { Price } from "@/components/price";
 import Link from "next/link";
 import { ContentPage } from "@/components/content-page";
 import { innerPageGraph, isoDateTime, pageMetadata } from "@/lib/seo";
-import { APP_NAME, GUIDE_PATH, LARGE_FILES_GUIDE_PATH, OG_IMAGE, PRICE, SITE_URL, pages } from "@/lib/site";
+import { APP_NAME, GUIDE_PATH, LARGE_FILES_GUIDE_PATH, OG_IMAGE, SITE_URL, pages } from "@/lib/site";
 
 const path = LARGE_FILES_GUIDE_PATH;
 const title = "How to find large files on a Mac: 6 free ways";
@@ -361,7 +362,7 @@ export default function GuidePage() {
       </p>
       <p>
         Nothing is deleted outright. Every cleanup goes to the Trash, and Undo puts it back. Learn more about{" "}
-        <Link href="/">{APP_NAME}, the disk cleanup app for Mac</Link>. It costs {PRICE} once, with no subscription.
+        <Link href="/">{APP_NAME}, the disk cleanup app for Mac</Link>. It costs <Price /> once, with no subscription.
       </p>
 
       <h2>Frequently asked questions</h2>

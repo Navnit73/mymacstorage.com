@@ -1,7 +1,8 @@
+import { Price } from "@/components/price";
 import Link from "next/link";
 import { ContentPage } from "@/components/content-page";
 import { innerPageGraph, pageMetadata } from "@/lib/seo";
-import { APP_NAME, PRICE, REFUND_DAYS, SUPPORT_EMAIL, pages } from "@/lib/site";
+import { APP_NAME, REFUND_DAYS, SUPPORT_EMAIL, pages } from "@/lib/site";
 
 const path = "/terms";
 const title = "Terms of service";
@@ -21,7 +22,7 @@ export default function TermsPage() {
     >
       <h2>Your licence</h2>
       <p>
-        When you buy {APP_NAME} for {PRICE}, you get a licence key for your own use. It works with both the Mac and
+        When you buy {APP_NAME} for <Price />, you get a licence key for your own use. It works with both the Mac and
         Windows versions of the app. The licence never expires and includes every future update.
       </p>
       <p>You agree not to:</p>

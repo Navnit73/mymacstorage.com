@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { APP_NAME, PRICE, SUPPORT_EMAIL, pages } from "@/lib/site";
+import { APP_NAME, SUPPORT_EMAIL, pages } from "@/lib/site";
+import { Price } from "./price";
 import { Logo } from "./icons";
 
 const productLinks = [
@@ -28,7 +29,7 @@ export function SiteFooter() {
               {APP_NAME}
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-pretty text-gray-500">
-              Disk cleanup for Mac, done safely. {PRICE} once, no subscription.
+              Disk cleanup for Mac, done safely. <Price /> once, no subscription.
             </p>
           </div>
           {columns.map(({ title, links }) => (

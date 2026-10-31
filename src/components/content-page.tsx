@@ -3,7 +3,7 @@ import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { APP_NAME, PRICE } from "@/lib/site";
+import { APP_NAME } from "@/lib/site";
 
 // Long-form text styles, so page bodies stay plain JSX headings, paragraphs and lists.
 const prose =
@@ -38,7 +38,7 @@ export function ContentPage({
   return (
     <>
       <JsonLd graph={graph} />
-      <SiteHeader appName={APP_NAME} price={PRICE} />
+      <SiteHeader appName={APP_NAME} />
       <main className="px-4 pt-24 pb-16 sm:px-6 sm:pt-28 sm:pb-24">
         <article className="mx-auto max-w-3xl">
           <nav aria-label="Breadcrumb" className="text-sm text-gray-500">

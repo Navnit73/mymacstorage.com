@@ -1,6 +1,7 @@
 export const SITE_URL = "https://mymacstorage.com";
 export const APP_NAME = "MyMacStorage";
-export const PRICE = "$19.99";
+/** The USD price, used wherever it must be static text (metadata, structured data). Pages show <Price /> instead. */
+export const PRICE = "$14.99";
 /** Price without the currency symbol, for structured data. */
 export const PRICE_VALUE = PRICE.replace("$", "");
 export const SUPPORT_EMAIL = "support@mymacstorage.com";

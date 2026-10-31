@@ -1,7 +1,8 @@
+import { Price } from "@/components/price";
 import Link from "next/link";
 import { ContentPage } from "@/components/content-page";
 import { innerPageGraph, pageMetadata } from "@/lib/seo";
-import { APP_NAME, GUIDE_PATH, PRICE, SUPPORT_EMAIL } from "@/lib/site";
+import { APP_NAME, GUIDE_PATH, SUPPORT_EMAIL } from "@/lib/site";
 
 const path = "/about";
 const title = "About MyMacStorage";
@@ -42,7 +43,7 @@ export default function AboutPage() {
       </p>
       <h3>Pay once, keep it</h3>
       <p>
-        {APP_NAME} costs {PRICE} once. There&rsquo;s no subscription, every future update is included, and one key
+        {APP_NAME} costs <Price /> once. There&rsquo;s no subscription, every future update is included, and one key
         covers both the Mac and Windows versions.
       </p>
 

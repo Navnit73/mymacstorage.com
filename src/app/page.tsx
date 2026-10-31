@@ -16,6 +16,7 @@ import { AppleIcon, WindowsIcon } from "@/components/icons";
 import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { Price } from "@/components/price";
 import { StorageBar } from "@/components/storage-bar";
 import { features } from "@/lib/features";
 import Link from "next/link";
@@ -30,7 +31,7 @@ export default function Home() {
   return (
     <>
       <JsonLd graph={jsonLd} />
-      <SiteHeader appName={APP_NAME} price={PRICE} />
+      <SiteHeader appName={APP_NAME} />
       <main id="top" className="flex flex-col">
         <Hero />
         <Section
@@ -143,7 +144,7 @@ function Hero() {
         <DownloadButtons className="mt-7" />
 
         <p className="mt-4 flex flex-wrap justify-center gap-x-2 gap-y-1 text-sm text-gray-500">
-          <span>{PRICE} once</span>
+          <span><Price /> once</span>
           <span aria-hidden>&middot;</span>
           <span>One key for Mac and Windows</span>
           <span aria-hidden className="hidden sm:inline">
@@ -310,7 +311,7 @@ function Comparison() {
           <h3 className="text-xl font-bold tracking-tight sm:text-2xl">MyMacStorage vs subscription cleaners</h3>
           <p className="mt-3 leading-relaxed text-pretty text-gray-600">
             Many Mac cleanup tools charge you every year and ask you to trust them with your files. {APP_NAME} costs{" "}
-            {PRICE} once, runs entirely on your Mac and never uploads a filename.
+            <Price /> once, runs entirely on your Mac and never uploads a filename.
           </p>
           <p className="mt-3 leading-relaxed text-pretty text-gray-600">
             You get every future update without a subscription, and one key covers the Windows version too.
@@ -449,9 +450,8 @@ function Pricing() {
           <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold tracking-wide text-gray-600 uppercase">
             Lifetime licence
           </span>
-          <p className="mt-4 flex items-start justify-center font-bold tracking-tight">
-            <span className="mt-2 text-3xl">$</span>
-            <span className="text-7xl leading-none sm:text-[80px]">{PRICE.replace("$", "")}</span>
+          <p className="mt-4 text-7xl leading-none font-bold tracking-tight sm:text-[80px]">
+            <Price />
           </p>
           <p className="mt-2 text-gray-500">One-time payment</p>
         </div>
@@ -473,13 +473,18 @@ function Pricing() {
               href={CHECKOUT_URL}
               className="rounded-xl bg-lime-600 px-6 py-3.5 text-center font-medium text-white transition-colors hover:bg-lime-700 active:bg-lime-700"
             >
-              Buy for {PRICE}
+              Buy for <Price />
             </a>
           </div>
         </div>
       </div>
     </Section>
   );
+}
+
+/** The FAQ text is written with the USD price so structured data stays static; on screen it shows the visitor's own. */
+function WithPrice({ text }: { text: string }) {
+  return text.split(PRICE).flatMap((part, i) => (i === 0 ? [part] : [<Price key={i} />, part]));
 }
 
 const faqs = [
@@ -600,12 +605,14 @@ function Faq() {
         {faqs.map(({ q, a }) => (
           <details key={q} className="group rounded-2xl bg-gray-100">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-4 rounded-2xl px-5 py-4 font-semibold transition-colors hover:text-lime-700 sm:px-6 sm:text-lg [&::-webkit-details-marker]:hidden">
-              {q}
+              <WithPrice text={q} />
               <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-white">
                 <Plus className="size-4 text-gray-600 transition-transform duration-200 group-open:rotate-45" />
               </span>
             </summary>
-            <p className="px-5 pb-5 leading-relaxed text-pretty text-gray-600 sm:px-6">{a}</p>
+            <p className="px-5 pb-5 leading-relaxed text-pretty text-gray-600 sm:px-6">
+              <WithPrice text={a} />
+            </p>
           </details>
         ))}
         <p className="mt-4 text-center text-gray-600">
@@ -628,7 +635,7 @@ function FinalCta() {
           Give your Mac room to breathe.
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-pretty text-gray-400 sm:mt-4 sm:text-lg">
-          One scan shows you everything filling your Mac. {PRICE} once, and it&rsquo;s yours.
+          One scan shows you everything filling your Mac. <Price /> once, and it&rsquo;s yours.
         </p>
         <div className="mx-auto mt-8 flex max-w-xs flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center">
           <a

@@ -1,3 +1,4 @@
+import { Price } from "@/components/price";
 import Link from "next/link";
 import { ContentPage } from "@/components/content-page";
 import { innerPageGraph, isoDateTime, pageMetadata } from "@/lib/seo";
@@ -7,7 +8,6 @@ import {
   CACHE_GUIDE_PATH,
   GUIDE_PATH,
   OG_IMAGE,
-  PRICE,
   PRO_CACHE_GUIDE_PATH,
   SAFARI_CACHE_GUIDE_PATH,
   SITE_URL,
@@ -315,7 +315,7 @@ export default function GuidePage() {
         you clear the biggest first. Everything goes to the Trash, and Undo puts it back.
       </p>
       <p>
-        Learn more about <Link href="/">{APP_NAME}, the disk cleanup app for Mac</Link>. It costs {PRICE} once, with no
+        Learn more about <Link href="/">{APP_NAME}, the disk cleanup app for Mac</Link>. It costs <Price /> once, with no
         subscription.
       </p>
 
