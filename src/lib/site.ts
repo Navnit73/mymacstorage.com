@@ -5,7 +5,7 @@ export const PRICE = "$14.99";
 /** Price without the currency symbol, for structured data. */
 export const PRICE_VALUE = PRICE.replace("$", "");
 export const SUPPORT_EMAIL = "support@mymacstorage.com";
-export const REFUND_DAYS = 14;
+export const REFUND_DAYS = 7;
 /** The fixed GBP price shown on the UK pages in src/app/en-GB. */
 export const UK_PRICE = "£14.99";
 /** Every Buy and Download button reads this. The route starts a Dodo checkout session. */
