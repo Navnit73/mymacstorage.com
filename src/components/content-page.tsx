@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { APP_NAME } from "@/lib/site";
 
 // Long-form text styles, so page bodies stay plain JSX headings, paragraphs and lists.
-const prose =
+export const prose =
   "text-gray-700 leading-relaxed [&_a]:font-medium [&_a]:text-lime-700 [&_a]:underline-offset-4 hover:[&_a]:underline " +
   "[&_h2]:mt-12 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-tight [&_h2]:text-black sm:[&_h2]:text-3xl " +
   "[&_h3]:mt-8 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:tracking-tight [&_h3]:text-black " +

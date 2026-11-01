@@ -6,6 +6,8 @@ export const PRICE = "$14.99";
 export const PRICE_VALUE = PRICE.replace("$", "");
 export const SUPPORT_EMAIL = "support@mymacstorage.com";
 export const REFUND_DAYS = 14;
+/** The fixed GBP price shown on the UK pages in src/app/en-GB. */
+export const UK_PRICE = "£14.99";
 /** Every Buy and Download button reads this. The route starts a Dodo checkout session. */
 export const CHECKOUT_URL = "/api/checkout";
 
@@ -26,8 +28,48 @@ export const COOKIES_GUIDE_PATH = "/guides/how-to-clear-cookies-on-mac";
 export const AIR_CACHE_GUIDE_PATH = "/guides/how-to-clear-cache-on-macbook-air";
 export const PRO_CACHE_GUIDE_PATH = "/guides/how-to-clear-cache-on-macbook-pro";
 
+/** UK-only pages live under /en-GB. Each one is its own folder in src/app/en-GB. */
+export const UK_CLEANER_PATH = "/en-GB/mac-disk-space-cleaner";
+export const UK_SYSTEM_DATA_PATH = "/en-GB/macbook-system-data-too-large";
+/** US pages live under /en-US, one folder each in src/app/en-US. */
+export const US_CLEANER_APP_PATH = "/en-US/mac-cleaner-for-mac";
+
+/** The two English markets. Each guide below exists once per market, as its own page in src/app/en-US or src/app/en-GB. */
+export type MarketKey = "us" | "uk";
+export const MARKETS = {
+  us: { hreflang: "en-US", dir: "en-US", price: PRICE, cleanerPath: US_CLEANER_APP_PATH, cleanerLabel: "How to choose the best Mac cleaner app" },
+  uk: { hreflang: "en-GB", dir: "en-GB", price: UK_PRICE, cleanerPath: UK_CLEANER_PATH, cleanerLabel: "How to free up space on Mac" },
+};
+
+/** The market guides: one folder per market, so a slug may differ by spelling. `label` is the sitemap and link text. */
+export const GUIDES = {
+  appCleaner: { us: "app-cleaner-for-mac", uk: "app-cleaner-for-mac", label: "App cleaner for Mac" },
+  cleanMyMacAlternative: { us: "cleanmymac-alternative", uk: "cleanmymac-alternative", label: "CleanMyMac alternatives" },
+  clearRam: { us: "how-to-clear-ram-on-mac", uk: "how-to-clear-ram-on-mac", label: "How to clear RAM on Mac" },
+  diskAnalyzer: { us: "mac-disk-space-analyzer", uk: "mac-disk-space-analyser", label: "Mac disk space analyzer" },
+} as const;
+export type GuideKey = keyof typeof GUIDES;
+
+export const guidePath = (market: MarketKey, key: GuideKey) => `/${MARKETS[market].dir}/${GUIDES[key][market]}`;
+
+/** hreflang entries for the same guide in the other market, plus x-default (the US page). The page itself is added by pageMetadata. */
+export function guideAlternates(market: MarketKey, key: GuideKey) {
+  const other: MarketKey = market === "us" ? "uk" : "us";
+  return { [MARKETS[other].hreflang]: guidePath(other, key), "x-default": guidePath("us", key) };
+}
+
+/** The four market guides as page entries. The footer column is "US guides" or "UK guides". */
+function marketGuides(market: MarketKey) {
+  return (Object.keys(GUIDES) as GuideKey[]).map((key) => ({
+    path: guidePath(market, key),
+    label: market === "uk" ? GUIDES[key].label.replace("analyzer", "analyser") : GUIDES[key].label,
+    group: `${market.toUpperCase()} guides`,
+    updated: "2026-11-01",
+  }));
+}
+
 /** Public pages other than the home page, in sitemap and footer order. `group` is the footer column. */
-export const pages = [
+export const pages: { path: string; label: string; group: string; updated: string }[] = [
   { path: GUIDE_PATH, label: "Free up space", group: "Guides", updated: "2026-10-30" },
   { path: SYSTEM_DATA_GUIDE_PATH, label: "Reduce System Data", group: "Guides", updated: "2026-10-30" },
   { path: LARGE_FILES_GUIDE_PATH, label: "Find large files", group: "Guides", updated: "2026-10-30" },
@@ -37,6 +79,11 @@ export const pages = [
   { path: COOKIES_GUIDE_PATH, label: "Clear cookies", group: "Guides", updated: "2026-10-30" },
   { path: AIR_CACHE_GUIDE_PATH, label: "Clear cache on MacBook Air", group: "Guides", updated: "2026-10-30" },
   { path: PRO_CACHE_GUIDE_PATH, label: "Clear cache on MacBook Pro", group: "Guides", updated: "2026-10-30" },
+  { path: US_CLEANER_APP_PATH, label: "Best Mac cleaner app", group: "US guides", updated: "2026-11-01" },
+  ...marketGuides("us"),
+  { path: UK_CLEANER_PATH, label: "Free up space on Mac", group: "UK guides", updated: "2026-11-01" },
+  { path: UK_SYSTEM_DATA_PATH, label: "System Data on MacBook", group: "UK guides", updated: "2026-11-01" },
+  ...marketGuides("uk"),
   { path: "/about", label: "About", group: "Company", updated: "2026-10-29" },
   { path: "/contact", label: "Contact", group: "Company", updated: "2026-10-29" },
   { path: "/privacy", label: "Privacy", group: "Legal", updated: "2026-10-30" },

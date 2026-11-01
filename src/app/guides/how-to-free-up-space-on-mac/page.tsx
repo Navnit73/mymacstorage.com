@@ -1,3 +1,4 @@
+import { guidePath } from "@/lib/site";
 import { Price } from "@/components/price";
 import Link from "next/link";
 import { ContentPage } from "@/components/content-page";
@@ -406,6 +407,11 @@ export default function GuidePage() {
       <p>
         Nothing is deleted outright. Every cleanup goes to the Trash, and Undo puts it back. Learn more about{" "}
         <Link href="/">{APP_NAME}, the disk cleanup app for Mac</Link>. It costs <Price /> once, with no subscription.
+      </p>
+
+      <p>
+        Want to go further? Read how to <Link href={guidePath("us", "appCleaner")}>remove apps and their leftovers</Link>{" "}
+        and compare <Link href={guidePath("us", "diskAnalyzer")}>disk space analyzers for Mac</Link>.
       </p>
 
       <h2>Frequently asked questions</h2>
