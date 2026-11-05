@@ -49,9 +49,14 @@ export function SiteFooter() {
         </div>
         <div className="mt-12 flex flex-col gap-4 border-t border-gray-200 pt-6 text-sm text-gray-500 sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; 2026 {APP_NAME}. All rights reserved.</p>
-          <a href="https://macpip.com/apps/mymacstorage?ref=badge">
-            <img src="https://macpip.com/badge/mymacstorage.svg" height="58" alt="Listed on MacPip" />
-          </a>
+          <div className="flex items-center gap-4">
+            <a href="https://macpip.com/apps/mymacstorage?ref=badge">
+              <img src="https://macpip.com/badge/mymacstorage.svg" height="58" alt="Listed on MacPip" />
+            </a>
+            <a href="https://macappindex.com/apps/mymacstorage?ref=badge" target="_blank" title="MyMacStorage on Mac App Index">
+              <img src="https://macappindex.com/apps/mymacstorage/badge.svg?theme=light&height=40" alt="MyMacStorage on Mac App Index" width="160" height="40" />
+            </a>
+          </div>
           <a href={`mailto:${SUPPORT_EMAIL}`} className="transition-colors hover:text-black">
             {SUPPORT_EMAIL}
           </a>
