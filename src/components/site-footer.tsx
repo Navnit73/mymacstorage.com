@@ -47,8 +47,11 @@ export function SiteFooter() {
             </nav>
           ))}
         </div>
-        <div className="mt-12 flex flex-col gap-2 border-t border-gray-200 pt-6 text-sm text-gray-500 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-4 border-t border-gray-200 pt-6 text-sm text-gray-500 sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; 2026 {APP_NAME}. All rights reserved.</p>
+          <a href="https://macpip.com/apps/mymacstorage?ref=badge">
+            <img src="https://macpip.com/badge/mymacstorage.svg" height="58" alt="Listed on MacPip" />
+          </a>
           <a href={`mailto:${SUPPORT_EMAIL}`} className="transition-colors hover:text-black">
             {SUPPORT_EMAIL}
           </a>
