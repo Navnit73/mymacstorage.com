@@ -62,6 +62,8 @@
   body {
     @apply bg-white text-black font-sans;
     -webkit-tap-highlight-color: transparent;
+    /* viewport-fit=cover: keep content clear of the notch in landscape. */
+    padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
   }
 
   ::selection {
@@ -70,5 +72,62 @@
 
   :focus-visible {
     @apply rounded-md outline-2 outline-offset-2 outline-lime-600;
+  }
+
+  /* Let <details> animate to its natural height where the browser supports it. */
+  :root {
+    interpolate-size: allow-keywords;
+  }
+}
+
+@layer components {
+  /* A fine dot grid for hero and CTA backdrops. Colour comes from --dot so it works on light and dark cards. */
+  .bg-dots {
+    background-image: radial-gradient(var(--dot, oklch(0% 0 0 / 0.07)) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  /* Soft lime light behind a hero or CTA. Pure colour, no shadow. */
+  .bg-glow {
+    background-image: radial-gradient(60% 55% at 50% 0%, oklch(64.8% 0.2 131.684 / 0.16), transparent 70%);
+  }
+
+  /* A thin lime-to-grey edge for premium cards, drawn as a padded gradient behind the card. */
+  .edge-lime {
+    background: linear-gradient(160deg, oklch(64.8% 0.2 131.684 / 0.55), oklch(92.2% 0 0) 45%, oklch(92.2% 0 0));
+  }
+
+  /* Smooth accordion on browsers that support ::details-content; others open instantly. */
+  .faq-item::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 0.3s ease,
+      content-visibility 0.3s allow-discrete;
+  }
+  .faq-item[open]::details-content {
+    block-size: auto;
+  }
+}
+
+/* Sections rise in as they scroll into view. CSS only, so it costs no JavaScript and is skipped where unsupported. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    translate: 0 28px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
   }
 }

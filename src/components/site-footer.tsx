@@ -20,7 +20,7 @@ const columns = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-gray-200 px-4 pt-12 pb-8 sm:px-6 sm:pt-16">
+    <footer className="border-t border-gray-200 px-4 pt-12 pb-[max(2rem,env(safe-area-inset-bottom))] sm:px-6 sm:pt-16">
       <div className="mx-auto max-w-6xl">
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 lg:grid-cols-[1.5fr_repeat(6,minmax(0,1fr))]">
           <div className="col-span-2 sm:col-span-4 lg:col-span-1">

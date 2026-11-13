@@ -2,15 +2,17 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
-import { CHECKOUT_URL } from "@/lib/site";
-import { Logo } from "./icons";
+import { ArrowRight, Menu, X } from "lucide-react";
+import { CHECKOUT_URL, GUIDE_PATH, REFUND_DAYS } from "@/lib/site";
+import { AppleIcon, Logo } from "./icons";
 import { Price } from "./price";
 
 const links = [
   { href: "/#inside", label: "Inside" },
+  { href: "/#how", label: "How it works" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/#faq", label: "FAQ" },
+  { href: GUIDE_PATH, label: "Guides" },
 ];
 
 // Ignore tiny scroll jitter (e.g. trackpad bounce) so the bar doesn't flicker.
@@ -35,64 +37,112 @@ export function SiteHeader({ appName }: { appName: string }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Escape closes the menu; widening past the phone layout closes it too.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const wide = window.matchMedia("(min-width: 768px)");
+    const onWide = () => wide.matches && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    wide.addEventListener("change", onWide);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      wide.removeEventListener("change", onWide);
+    };
+  }, [open]);
+
   const solid = scrolled || open;
   const hidden = scrollingDown && scrolled && !open;
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 px-3 pt-3 transition-transform duration-300 sm:px-6 sm:pt-5 ${
-        hidden ? "-translate-y-full" : "translate-y-0"
+      className={`fixed inset-x-0 top-0 z-50 px-3 pt-[max(0.75rem,env(safe-area-inset-top))] transition-transform duration-300 sm:px-6 sm:pt-5 ${
+        hidden ? "-translate-y-[120%]" : "translate-y-0"
       }`}
     >
       <div
-        className={`mx-auto max-w-5xl rounded-2xl border transition-all duration-300 ${
-          solid ? "border-gray-200/80 bg-white/80 shadow-lg shadow-black/5 backdrop-blur-md" : "border-transparent"
+        className={`mx-auto max-w-5xl rounded-2xl border transition-[background-color,border-color,backdrop-filter] duration-300 ${
+          solid ? "border-gray-200/80 bg-white/75 backdrop-blur-xl backdrop-saturate-150" : "border-transparent"
         }`}
       >
-        <div className="flex h-14 items-center justify-between pr-2 pl-4 sm:h-16 sm:pr-3 sm:pl-6">
-          <Link href="/" className="flex items-center gap-2.5 font-semibold" onClick={() => setOpen(false)}>
+        <div className="flex h-14 items-center justify-between gap-2 pr-2 pl-3 sm:h-16 sm:pr-3 sm:pl-5">
+          <Link
+            href="/"
+            className="flex min-w-0 items-center gap-2.5 font-semibold tracking-tight"
+            onClick={() => setOpen(false)}
+          >
             <Logo />
-            {appName}
+            <span className="truncate">{appName}</span>
           </Link>
 
-          <nav className="flex items-center gap-2 text-sm sm:gap-7">
+          <nav aria-label="Main" className="flex shrink-0 items-center gap-1.5 text-sm md:gap-1">
             {links.map(({ href, label }) => (
-              <a key={href} href={href} className="hidden text-gray-700 transition-colors hover:text-black sm:block">
+              <Link
+                key={href}
+                href={href}
+                className="hidden rounded-lg px-3 py-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-black md:block"
+              >
                 {label}
-              </a>
+              </Link>
             ))}
             <a
               href={CHECKOUT_URL}
-              className="rounded-xl bg-lime-600 px-4 py-2 font-medium text-white transition-colors hover:bg-lime-700"
+              className="ml-1 inline-flex items-center gap-1.5 rounded-xl bg-lime-600 px-3.5 py-2 font-medium whitespace-nowrap text-white transition-colors hover:bg-lime-700 active:bg-lime-700 sm:px-4"
             >
-              Buy for <Price />
+              Buy
+              <span className="max-[359px]:hidden">
+                for <Price />
+              </span>
             </a>
             <button
               type="button"
               onClick={() => setOpen((o) => !o)}
               aria-expanded={open}
+              aria-controls="mobile-menu"
               aria-label={open ? "Close menu" : "Open menu"}
-              className="flex size-10 items-center justify-center rounded-lg text-black sm:hidden"
+              className="flex size-10 items-center justify-center rounded-lg text-black transition-colors active:bg-gray-100 md:hidden"
             >
               {open ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
           </nav>
         </div>
 
-        {open && (
-          <nav className="mx-4 border-t border-gray-100 pb-2 sm:hidden">
-            {links.map(({ href, label }) => (
+        {/* Phones and small tablets: grid-rows animates the menu open without measuring its height. */}
+        <div
+          id="mobile-menu"
+          className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out md:hidden ${
+            open ? "grid-rows-[1fr] opacity-100" : "pointer-events-none grid-rows-[0fr] opacity-0"
+          }`}
+          inert={!open}
+        >
+          <div className="overflow-hidden">
+            <nav aria-label="Mobile" className="mx-3 border-t border-gray-100 pt-1">
+              {links.map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center justify-between border-b border-gray-100 px-1 py-3.5 text-base font-medium last:border-0 active:text-lime-700"
+                >
+                  {label}
+                  <ArrowRight className="size-4 text-gray-400" />
+                </Link>
+              ))}
+            </nav>
+            <div className="p-3 pt-2">
               <a
-                key={href}
-                href={href}
-                onClick={() => setOpen(false)}
-                className="block border-b border-gray-100 py-3.5 text-base font-medium last:border-0"
+                href={CHECKOUT_URL}
+                className="flex items-center justify-center gap-2.5 rounded-xl bg-lime-600 px-6 py-3.5 font-medium text-white active:bg-lime-700"
               >
-                {label}
+                <AppleIcon className="size-4" />
+                Download for Mac &middot; <Price />
               </a>
-            ))}
-          </nav>
-        )}
+              <p className="mt-2 text-center text-xs text-gray-500">
+                One-time payment &middot; {REFUND_DAYS}-day refund
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
   );

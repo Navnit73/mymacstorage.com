@@ -28,7 +28,8 @@ export function HeroSlider() {
     setSlider((prev) => {
       const next = update(prev.index);
       const after = (next + 1) % slides.length;
-      const mounted = prev.mounted.has(next) && prev.mounted.has(after) ? prev.mounted : new Set(prev.mounted).add(next).add(after);
+      const mounted =
+        prev.mounted.has(next) && prev.mounted.has(after) ? prev.mounted : new Set(prev.mounted).add(next).add(after);
       return { index: next, mounted };
     });
   const touchX = useRef<number | null>(null);
@@ -55,7 +56,9 @@ export function HeroSlider() {
                 onClick={() => setIndex(() => i)}
                 aria-pressed={isActive}
                 className={`flex w-full cursor-pointer flex-col items-center gap-1.5 rounded-xl py-2.5 transition-colors sm:gap-2 ${
-                  isActive ? "bg-white text-lime-700" : "text-gray-600 hover:text-black"
+                  isActive
+                    ? "bg-white text-lime-700 ring-1 ring-gray-200/80"
+                    : "text-gray-600 hover:bg-white/50 hover:text-black"
                 }`}
               >
                 <Icon
@@ -83,44 +86,47 @@ export function HeroSlider() {
           touchX.current = null;
         }}
       >
-        <AppWindow active={current.name} onSelect={select}>
-          <div className="relative aspect-[3/2]">
-            {slides.map(({ name, src }, i) =>
-              src && mounted.has(i) ? (
-                <Image
-                  key={name}
-                  src={src}
-                  alt={`MyMacStorage ${name} screen on a Mac`}
-                  fill
-                  preload={i === 0}
-                  fetchPriority={i === 0 ? undefined : "low"}
-                  sizes="(min-width: 1024px) 1024px, 100vw"
-                  className={`object-cover object-top transition-opacity duration-700 ${
-                    i === index ? "opacity-100" : "opacity-0"
-                  }`}
-                />
-              ) : src ? null : (
-                <div
-                  key={name}
-                  className={`absolute inset-3 flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium text-gray-500 transition-opacity duration-700 sm:inset-4 ${
-                    i === index ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  {name} screenshot coming soon
-                </div>
-              ),
-            )}
-          </div>
-        </AppWindow>
+        {/* A soft bezel around the window gives it depth without a drop shadow. */}
+        <div className="rounded-[14px] bg-white/70 p-1 ring-1 ring-gray-200/80 backdrop-blur sm:rounded-[20px] sm:p-2">
+          <AppWindow active={current.name} onSelect={select}>
+            <div className="relative aspect-[3/2]">
+              {slides.map(({ name, src }, i) =>
+                src && mounted.has(i) ? (
+                  <Image
+                    key={name}
+                    src={src}
+                    alt={`MyMacStorage ${name} screen on a Mac`}
+                    fill
+                    preload={i === 0}
+                    fetchPriority={i === 0 ? undefined : "low"}
+                    sizes="(min-width: 1024px) 1024px, 100vw"
+                    className={`object-cover object-top transition-opacity duration-700 ${
+                      i === index ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                ) : src ? null : (
+                  <div
+                    key={name}
+                    className={`absolute inset-3 flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium text-gray-500 transition-opacity duration-700 sm:inset-4 ${
+                      i === index ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    {name} screenshot coming soon
+                  </div>
+                ),
+              )}
+            </div>
+          </AppWindow>
+        </div>
 
-        <div className="mt-4 flex justify-center gap-1 sm:mt-5">
+        <div className="mt-3 flex justify-center sm:mt-4">
           {slides.map(({ name }, i) => (
             <button
               key={name}
               type="button"
               onClick={() => setIndex(() => i)}
               aria-label={`Show ${name}`}
-              className="group flex h-6 cursor-pointer items-center px-1"
+              className="group flex h-9 cursor-pointer items-center px-1.5 sm:h-7 sm:px-1"
             >
               <span
                 className={`block h-1.5 rounded-full transition-all duration-300 ${

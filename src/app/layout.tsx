@@ -45,6 +45,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#ffffff",
+  // Draw under the iPhone notch and home indicator; the header and footer pad themselves with safe-area insets.
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

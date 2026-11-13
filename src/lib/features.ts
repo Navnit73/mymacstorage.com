@@ -45,7 +45,8 @@ export const features: Feature[] = [
     name: "Duplicates",
     description: "Files that exist twice, matched byte for byte.",
     icon: Copy,
-    image: null,
+    // Cropped from public/screenshots/duplicate.png to the content area, like the other screenshots.
+    image: "/screenshots/duplicates.webp",
   },
   {
     name: "Applications",

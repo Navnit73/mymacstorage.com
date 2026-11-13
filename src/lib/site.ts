@@ -27,6 +27,10 @@ export const SAFARI_CACHE_GUIDE_PATH = "/guides/how-to-clear-safari-cache-on-mac
 export const COOKIES_GUIDE_PATH = "/guides/how-to-clear-cookies-on-mac";
 export const AIR_CACHE_GUIDE_PATH = "/guides/how-to-clear-cache-on-macbook-air";
 export const PRO_CACHE_GUIDE_PATH = "/guides/how-to-clear-cache-on-macbook-pro";
+export const PURGEABLE_GUIDE_PATH = "/guides/how-to-clear-purgeable-space-on-mac";
+export const UPDATE_SPACE_GUIDE_PATH = "/guides/not-enough-space-to-update-mac";
+export const IPHONE_BACKUPS_GUIDE_PATH = "/guides/how-to-delete-iphone-backups-on-mac";
+export const XCODE_SPACE_GUIDE_PATH = "/guides/xcode-taking-up-too-much-space";
 
 /** UK-only pages live under /en-GB. Each one is its own folder in src/app/en-GB. */
 export const UK_CLEANER_PATH = "/en-GB/mac-disk-space-cleaner";
@@ -79,6 +83,10 @@ export const pages: { path: string; label: string; group: string; updated: strin
   { path: COOKIES_GUIDE_PATH, label: "Clear cookies", group: "Guides", updated: "2026-10-30" },
   { path: AIR_CACHE_GUIDE_PATH, label: "Clear cache on MacBook Air", group: "Guides", updated: "2026-10-30" },
   { path: PRO_CACHE_GUIDE_PATH, label: "Clear cache on MacBook Pro", group: "Guides", updated: "2026-10-30" },
+  { path: PURGEABLE_GUIDE_PATH, label: "Clear purgeable space", group: "Guides", updated: "2026-11-13" },
+  { path: UPDATE_SPACE_GUIDE_PATH, label: "Not enough space to update", group: "Guides", updated: "2026-11-13" },
+  { path: IPHONE_BACKUPS_GUIDE_PATH, label: "Delete iPhone backups", group: "Guides", updated: "2026-11-13" },
+  { path: XCODE_SPACE_GUIDE_PATH, label: "Xcode taking up space", group: "Guides", updated: "2026-11-13" },
   { path: US_CLEANER_APP_PATH, label: "Best Mac cleaner app", group: "US guides", updated: "2026-11-01" },
   ...marketGuides("us"),
   { path: UK_CLEANER_PATH, label: "Free up space on Mac", group: "UK guides", updated: "2026-11-01" },
