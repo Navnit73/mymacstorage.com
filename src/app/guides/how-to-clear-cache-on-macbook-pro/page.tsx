@@ -20,7 +20,7 @@ const description =
 const updated = pages.find((p) => p.path === path)?.updated ?? "2026-10-30";
 
 export const metadata = pageMetadata({
-  title: "How to Clear Cache on MacBook Pro (Pro Apps and Xcode)",
+  title: "Clear Cache on MacBook Pro: Pro Apps and Xcode",
   description,
   path,
   type: "article",

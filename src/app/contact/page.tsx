@@ -7,7 +7,7 @@ const path = "/contact";
 const title = "Contact MyMacStorage support";
 const description = `Email ${APP_NAME} support for help with the app, your licence, refunds or feedback.`;
 
-export const metadata = pageMetadata({ title: "Contact", description, path });
+export const metadata = pageMetadata({ title: "Contact Support and Sales", description, path });
 
 export default function ContactPage() {
   return (

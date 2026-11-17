@@ -6,7 +6,10 @@ import { APP_NAME, DUPLICATES_GUIDE_PATH, GUIDE_PATH, SYSTEM_DATA_GUIDE_PATH } f
 
 export const metadata: Metadata = {
   title: "Page not found",
-  robots: { index: false, follow: true },
+  // Don't inherit the home page's canonical and social tags from the root layout. Next adds noindex to 404s itself.
+  alternates: { canonical: null },
+  openGraph: null,
+  twitter: null,
 };
 
 const links = [

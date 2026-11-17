@@ -71,8 +71,8 @@ export function GuideLayout({
                 Updated <time dateTime={updated}>{date}</time> &middot; {readMinutes} min read
               </p>
             </div>
-            <aside className="rounded-2xl bg-white p-6 sm:p-8">
-              <h2 className="text-xl font-bold tracking-tight sm:text-2xl">Key takeaways</h2>
+            <section aria-labelledby="key-takeaways" className="rounded-2xl bg-white p-6 sm:p-8">
+              <h2 id="key-takeaways" className="text-xl font-bold tracking-tight sm:text-2xl">Key takeaways</h2>
               <ul className="mt-5 flex flex-col gap-3">
                 {takeaways.map((item) => (
                   <li key={item} className="flex items-start gap-3">
@@ -81,7 +81,7 @@ export function GuideLayout({
                   </li>
                 ))}
               </ul>
-            </aside>
+            </section>
           </div>
           <nav aria-label="In this guide" className="mx-auto mt-4 max-w-6xl">
             <ul className="flex flex-wrap justify-center gap-2">

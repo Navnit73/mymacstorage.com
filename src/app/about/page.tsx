@@ -9,7 +9,7 @@ const title = "About MyMacStorage";
 const description =
   "Why MyMacStorage exists, the principles behind it and how it keeps your files safe while it cleans up your Mac.";
 
-export const metadata = pageMetadata({ title: "About", description, path });
+export const metadata = pageMetadata({ title: "About: Safe Disk Cleanup for Mac", description, path });
 
 export default function AboutPage() {
   return (

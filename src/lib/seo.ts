@@ -56,7 +56,9 @@ export const organizationNode = {
   "@id": `${SITE_URL}/#organization`,
   name: APP_NAME,
   url: SITE_URL,
-  logo: `${SITE_URL}/icon.svg`,
+  // Google needs a raster logo of at least 112px. /apple-icon is the 180px PNG.
+  logo: { "@type": "ImageObject", url: `${SITE_URL}/apple-icon`, width: 180, height: 180 },
+  sameAs: ["https://macpip.com/apps/mymacstorage", "https://macappindex.com/apps/mymacstorage"],
   email: SUPPORT_EMAIL,
   contactPoint: { "@type": "ContactPoint", contactType: "customer support", email: SUPPORT_EMAIL },
 };

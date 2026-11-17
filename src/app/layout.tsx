@@ -58,8 +58,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <PriceProvider>{children}</PriceProvider>
         <NavigationBeacon />
-        <Script src="https://analytics.ahrefs.com/analytics.js" data-key="Sq3+cAUB6rNqzaWgQlGO6g" />
-        <Script id="microsoft-clarity">
+        <Script src="https://analytics.ahrefs.com/analytics.js" data-key="Sq3+cAUB6rNqzaWgQlGO6g" strategy="lazyOnload" />
+        <Script id="microsoft-clarity" strategy="lazyOnload">
           {`(function(c,l,a,r,i,t,y){
             c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
             t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;

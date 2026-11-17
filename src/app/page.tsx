@@ -738,7 +738,7 @@ const jsonLd = [
     description: SITE_DESCRIPTION,
     isPartOf: { "@id": `${SITE_URL}/#website` },
     about: { "@id": `${SITE_URL}/#software` },
-    primaryImageOfPage: OG_IMAGE,
+    primaryImageOfPage: { "@type": "ImageObject", url: OG_IMAGE, width: 1200, height: 630 },
     inLanguage: "en",
   },
   {
@@ -752,7 +752,13 @@ const jsonLd = [
       "Disk cleanup for Mac. A native storage cleaner and disk space analyzer that clears caches, duplicates and app leftovers to the Trash.",
     image: OG_IMAGE,
     publisher: { "@id": `${SITE_URL}/#organization` },
-    offers: { "@type": "Offer", price: PRICE_VALUE, priceCurrency: "USD", url: `${SITE_URL}/#pricing` },
+    offers: {
+      "@type": "Offer",
+      price: PRICE_VALUE,
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+      url: SITE_URL,
+    },
   },
   {
     "@type": "FAQPage",

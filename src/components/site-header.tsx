@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Menu, X } from "lucide-react";
-import { CHECKOUT_URL, GUIDE_PATH, REFUND_DAYS } from "@/lib/site";
+import { CHECKOUT_URL, REFUND_DAYS } from "@/lib/site";
 import { AppleIcon, Logo } from "./icons";
 import { Price } from "./price";
 
@@ -12,7 +12,7 @@ const links = [
   { href: "/#how", label: "How it works" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/#faq", label: "FAQ" },
-  { href: GUIDE_PATH, label: "Guides" },
+  { href: "/guides", label: "Guides" },
 ];
 
 // Ignore tiny scroll jitter (e.g. trackpad bounce) so the bar doesn't flicker.
@@ -87,7 +87,7 @@ export function SiteHeader({ appName }: { appName: string }) {
             ))}
             <a
               href={CHECKOUT_URL}
-              className="ml-1 inline-flex items-center gap-1.5 rounded-xl bg-lime-600 px-3.5 py-2 font-medium whitespace-nowrap text-white transition-colors hover:bg-lime-700 active:bg-lime-700 sm:px-4"
+              className="ml-1 inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-lime-600 px-3.5 py-2 font-medium whitespace-nowrap text-white transition-colors hover:bg-lime-700 active:bg-lime-700 sm:px-4"
             >
               Buy
               <span className="max-[359px]:hidden">

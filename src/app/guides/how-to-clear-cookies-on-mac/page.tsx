@@ -10,7 +10,7 @@ const description =
 const updated = pages.find((p) => p.path === path)?.updated ?? "2026-10-30";
 
 export const metadata = pageMetadata({
-  title: "How to Clear Cookies on Mac (Safari, Chrome, Firefox, Edge)",
+  title: "How to Clear Cookies on Mac (All Browsers)",
   description,
   path,
   type: "article",

@@ -1,0 +1,14 @@
+# MyMacStorage
+
+> A native Mac app that maps your disk, finds caches, duplicates, large files and app leftovers, and moves what you choose to the Trash so every cleanup can be undone. One-time purchase, no subscription.
+
+## Guides
+- [Mac storage guides](https://mymacstorage.com/guides): every guide in one list
+- [How to free up space on Mac](https://mymacstorage.com/guides/how-to-free-up-space-on-mac)
+- [How to reduce System Data on Mac](https://mymacstorage.com/guides/how-to-reduce-system-data-on-mac)
+- [How to clear cache on Mac](https://mymacstorage.com/guides/how-to-clear-cache-on-mac)
+- [How to find large files on Mac](https://mymacstorage.com/guides/how-to-find-large-files-on-mac)
+
+## Company
+- [About](https://mymacstorage.com/about)
+- [Refund policy](https://mymacstorage.com/refund-policy)
