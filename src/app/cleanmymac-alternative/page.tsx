@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AppCallout, GuideLayout, GuideTable } from "@/components/guide-layout";
 import { articleGraph, innerPageGraph, pageMetadata } from "@/lib/seo";
-import { APP_NAME, GUIDES, MARKETS, REFUND_DAYS, guideAlternates, guidePath } from "@/lib/site";
+import { APP_NAME, GUIDES, MARKETS, REFUND_DAYS, guidePath } from "@/lib/site";
 
 const market = "us" as const;
 const { hreflang, price, cleanerPath, cleanerLabel } = MARKETS[market];
@@ -15,8 +15,6 @@ export const metadata = pageMetadata({
   description,
   path,
   type: "article",
-  hreflang,
-  alternates: guideAlternates(market, key),
 });
 
 const criteria = [
@@ -66,7 +64,7 @@ const faqs = [
 
 const graph = [
   ...innerPageGraph({ path, name: "CleanMyMac alternatives", description, language: hreflang }),
-  ...articleGraph({ path, headline: title, description, published: "2026-11-01", updated: "2026-11-01", language: hreflang, faqs }),
+  ...articleGraph({ path, headline: title, description, published: "2026-11-01", updated: "2026-11-24", language: hreflang, faqs }),
 ];
 
 export default function CleanMyMacAlternativeGuide() {

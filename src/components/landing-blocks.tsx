@@ -4,14 +4,13 @@ import { Check, Plus } from "lucide-react";
 import { HeroSlider } from "@/components/hero-slider";
 import { AppleIcon } from "@/components/icons";
 import { Section } from "@/components/section";
-import { CHECKOUT_URL, PRICE, REFUND_DAYS, UK_PRICE } from "@/lib/site";
+import { CHECKOUT_URL, PRICE, REFUND_DAYS } from "@/lib/site";
 
-/** Blocks shared by the landing-style pages in src/app/en-GB. They match the home page's design. */
+/** Blocks shared by the landing-style pages such as /best-mac-cleaner. They match the home page's design. */
 
-/** The words and price that differ between the en-GB and en-US pages. */
-export type Market = "uk" | "us";
+/** Kept as a type so pages can still pass market="us". */
+export type Market = "us";
 const MARKETS = {
-  uk: { price: UK_PRICE, bin: "Bin", licence: "licence" },
   us: { price: PRICE, bin: "Trash", licence: "license" },
 };
 

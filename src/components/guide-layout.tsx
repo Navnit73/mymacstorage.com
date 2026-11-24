@@ -156,8 +156,8 @@ export function GuideTable({ head, rows }: { head: string[]; rows: string[][] })
           {rows.map(([first, ...rest]) => (
             <tr key={first}>
               <th scope="row">{first}</th>
-              {rest.map((cell) => (
-                <td key={cell}>{cell}</td>
+              {rest.map((cell, i) => (
+                <td key={i}>{cell}</td>
               ))}
             </tr>
           ))}

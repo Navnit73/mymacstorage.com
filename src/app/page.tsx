@@ -47,6 +47,7 @@ import {
   SITE_DESCRIPTION,
   SITE_URL,
   SUPPORT_EMAIL,
+  pages,
 } from "@/lib/site";
 
 const NUMBER_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
@@ -95,6 +96,7 @@ export default function Home() {
         {SHOW_TESTIMONIALS && <Testimonials />}
         <Pricing />
         <Faq />
+        <PopularGuides />
         <FinalCta />
       </main>
       <SiteFooter />
@@ -820,6 +822,50 @@ function Faq() {
             </details>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+/** The most-searched guides, so the home page passes link weight to them, plus a link to the full list. */
+const POPULAR_GUIDES = [
+  "/guides/how-to-free-up-space-on-mac",
+  "/guides/how-to-reduce-system-data-on-mac",
+  "/guides/how-to-check-storage-on-mac",
+  "/guides/how-to-clear-cache-on-mac",
+  "/guides/macos-taking-up-too-much-storage",
+  "/guides/how-to-find-large-files-on-mac",
+  "/guides/how-to-delete-time-machine-snapshots",
+  "/guides/not-enough-space-to-update-mac",
+  "/best-mac-cleaner",
+];
+
+function PopularGuides() {
+  const links = POPULAR_GUIDES.map((path) => pages.find((p) => p.path === path)).filter((p) => p !== undefined);
+  return (
+    <section aria-labelledby="popular-guides" className="px-4 pb-14 sm:px-6 sm:pb-20">
+      <div className="mx-auto max-w-6xl">
+        <h2 id="popular-guides" className="text-center text-2xl font-bold tracking-tight sm:text-3xl">
+          Prefer to do it by hand? Start here.
+        </h2>
+        <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {links.map(({ path, label }) => (
+            <li key={path}>
+              <Link
+                href={path}
+                className="flex h-full items-center justify-between gap-3 rounded-2xl bg-gray-100 px-5 py-4 font-medium transition-colors hover:bg-lime-50 hover:text-lime-700"
+              >
+                {label}
+                <ArrowRight className="size-4 shrink-0" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-6 text-center">
+          <Link href="/guides" className="font-medium text-lime-700 underline-offset-4 hover:underline">
+            See all Mac storage guides
+          </Link>
+        </p>
       </div>
     </section>
   );

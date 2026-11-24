@@ -7,30 +7,24 @@ export function pageMetadata({
   description,
   path,
   type = "website",
-  hreflang,
-  alternates,
 }: {
   title: string;
   description: string;
   path: string;
   type?: "website" | "article";
-  /** hreflang code for a page written for one market, e.g. "en-GB". Leave out for the default pages. */
-  hreflang?: string;
-  /** The same page in other markets, by hreflang code, e.g. { "en-US": "/en-US/..." }. */
-  alternates?: Record<string, string>;
 }): Metadata {
   const fullTitle = `${title} | ${APP_NAME}`;
   return {
     title: fullTitle,
     description,
-    alternates: { canonical: path, ...(hreflang && { languages: { [hreflang]: path, ...alternates } }) },
+    alternates: { canonical: path },
     openGraph: {
       type,
       url: path,
       siteName: APP_NAME,
       title: fullTitle,
       description,
-      locale: hreflang ? hreflang.replace("-", "_") : "en_GB",
+      locale: "en_US",
       images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: `${APP_NAME} Overview screen showing disk usage on a Mac` }],
     },
     twitter: { card: "summary_large_image", title: fullTitle, description, images: [OG_IMAGE] },

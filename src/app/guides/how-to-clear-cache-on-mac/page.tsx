@@ -13,6 +13,12 @@ import {
   SITE_URL,
   SYSTEM_DATA_GUIDE_PATH,
   pages,
+  CHROME_CACHE_GUIDE_PATH,
+  FIREFOX_CACHE_GUIDE_PATH,
+  SPOTIFY_CACHE_GUIDE_PATH,
+  TEAMS_CACHE_GUIDE_PATH,
+  DNS_CACHE_GUIDE_PATH,
+  HOMEBREW_GUIDE_PATH,
 } from "@/lib/site";
 
 const path = CACHE_GUIDE_PATH;
@@ -369,6 +375,26 @@ export default function GuidePage() {
         Nothing is deleted outright. Every cleanup goes to the Trash, and Undo puts it back. Learn more about{" "}
         <Link href="/">{APP_NAME}, the disk cleanup app for Mac</Link>. It costs <Price /> once, with no subscription.
       </p>
+
+      <h2>Cache guides for specific apps</h2>
+      <p>Some apps keep caches that are worth clearing on their own. Each guide below covers one app step by step.</p>
+      <ul>
+        <li>
+          Browsers: <Link href={CHROME_CACHE_GUIDE_PATH}>clear Chrome cache</Link> and{" "}
+          <Link href={FIREFOX_CACHE_GUIDE_PATH}>clear Firefox cache</Link>.
+        </li>
+        <li>
+          Apps with big caches: <Link href={SPOTIFY_CACHE_GUIDE_PATH}>Spotify</Link> and{" "}
+          <Link href={TEAMS_CACHE_GUIDE_PATH}>Microsoft Teams</Link>.
+        </li>
+        <li>
+          Developer tools: <Link href={HOMEBREW_GUIDE_PATH}>Homebrew, npm and pip caches</Link>.
+        </li>
+        <li>
+          Websites not loading after a network change? That is the DNS cache, which holds no files. See{" "}
+          <Link href={DNS_CACHE_GUIDE_PATH}>how to flush DNS cache on a Mac</Link>.
+        </li>
+      </ul>
 
       <h2>Frequently asked questions</h2>
       {faqs.map(({ q, a }) => (

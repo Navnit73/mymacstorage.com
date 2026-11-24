@@ -2,12 +2,28 @@
 
 > A native Mac app that maps your disk, finds caches, duplicates, large files and app leftovers, and moves what you choose to the Trash so every cleanup can be undone. One-time purchase, no subscription.
 
-## Guides
+## Free up space
 - [Mac storage guides](https://mymacstorage.com/guides): every guide in one list
 - [How to free up space on Mac](https://mymacstorage.com/guides/how-to-free-up-space-on-mac)
+- [How to check storage on Mac](https://mymacstorage.com/guides/how-to-check-storage-on-mac)
 - [How to reduce System Data on Mac](https://mymacstorage.com/guides/how-to-reduce-system-data-on-mac)
-- [How to clear cache on Mac](https://mymacstorage.com/guides/how-to-clear-cache-on-mac)
+- [macOS taking up too much storage](https://mymacstorage.com/guides/macos-taking-up-too-much-storage)
+- [How to delete Time Machine snapshots](https://mymacstorage.com/guides/how-to-delete-time-machine-snapshots)
+- [How to clear purgeable space on Mac](https://mymacstorage.com/guides/how-to-clear-purgeable-space-on-mac)
+- [Not enough space to update macOS](https://mymacstorage.com/guides/not-enough-space-to-update-mac)
 - [How to find large files on Mac](https://mymacstorage.com/guides/how-to-find-large-files-on-mac)
+- [How much storage do I need on a Mac](https://mymacstorage.com/guides/how-much-storage-do-i-need-on-a-mac)
+
+## Caches
+- [How to clear cache on Mac](https://mymacstorage.com/guides/how-to-clear-cache-on-mac)
+- [How to clear Chrome cache on Mac](https://mymacstorage.com/guides/how-to-clear-chrome-cache-on-mac)
+- [How to flush DNS cache on Mac](https://mymacstorage.com/guides/how-to-clear-dns-cache-on-mac)
+
+## Compare Mac cleaners
+- [Best Mac cleaner app](https://mymacstorage.com/best-mac-cleaner)
+- [CleanMyMac alternatives](https://mymacstorage.com/cleanmymac-alternative)
+- [MyMacStorage vs CleanMyMac](https://mymacstorage.com/mymacstorage-vs-cleanmymac)
+- [Mac disk space analyzer](https://mymacstorage.com/mac-disk-space-analyzer)
 
 ## Company
 - [About](https://mymacstorage.com/about)

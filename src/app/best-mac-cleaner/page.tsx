@@ -19,11 +19,11 @@ import {
   SITE_URL,
   guidePath,
   SYSTEM_DATA_GUIDE_PATH,
-  US_CLEANER_APP_PATH as path,
+  BEST_CLEANER_PATH as path,
   pages,
 } from "@/lib/site";
 
-// US page: American spelling and the $ price as plain text. Competitor facts below were checked in November 2026.
+// Competitor facts below were checked in November 2026.
 const title = "Best Mac cleaner app: how to choose one you can trust";
 const description = `How to pick the best Mac cleaner app. Compare free and paid Mac cleaning software, spot the red flags, and see what ${APP_NAME} does for ${PRICE} once.`;
 const updated = pages.find((p) => p.path === path)?.updated ?? "2026-11-01";
@@ -32,7 +32,6 @@ export const metadata = pageMetadata({
   title: "Best Mac Cleaner App: How to Choose One",
   description,
   path,
-  hreflang: "en-US",
 });
 
 const nav = [

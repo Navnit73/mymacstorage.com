@@ -2,7 +2,21 @@ import { Price } from "@/components/price";
 import Link from "next/link";
 import { ContentPage } from "@/components/content-page";
 import { innerPageGraph, isoDateTime, pageMetadata } from "@/lib/seo";
-import { APP_NAME, CACHE_GUIDE_PATH, GUIDE_PATH, OG_IMAGE, SITE_URL, SYSTEM_DATA_GUIDE_PATH, pages } from "@/lib/site";
+import {
+  APP_NAME,
+  CACHE_GUIDE_PATH,
+  GUIDE_PATH,
+  OG_IMAGE,
+  SITE_URL,
+  SYSTEM_DATA_GUIDE_PATH,
+  pages,
+  SNAPSHOTS_GUIDE_PATH,
+  MACOS_STORAGE_GUIDE_PATH,
+  DOCKER_GUIDE_PATH,
+  HOMEBREW_GUIDE_PATH,
+  PURGEABLE_GUIDE_PATH,
+  INSTALLERS_GUIDE_PATH,
+} from "@/lib/site";
 
 const path = SYSTEM_DATA_GUIDE_PATH;
 const title = "How to reduce System Data on a Mac: 8 safe fixes";
@@ -362,6 +376,29 @@ export default function GuidePage() {
         Nothing is deleted outright. Every cleanup goes to the Trash, and Undo puts it back. Learn more about{" "}
         <Link href="/">{APP_NAME}, the disk cleanup app for Mac</Link>. It costs <Price /> once, with no subscription.
       </p>
+
+      <h2>Related fixes for System Data</h2>
+      <p>System Data overlaps with a few other problems. These guides go deeper on each one.</p>
+      <ul>
+        <li>
+          Time Machine local snapshots are often the largest hidden part. See{" "}
+          <Link href={SNAPSHOTS_GUIDE_PATH}>how to delete Time Machine snapshots</Link> and{" "}
+          <Link href={PURGEABLE_GUIDE_PATH}>how purgeable space works</Link>.
+        </li>
+        <li>
+          If the bar labelled macOS is the big one, not System Data, read{" "}
+          <Link href={MACOS_STORAGE_GUIDE_PATH}>why macOS takes up so much storage</Link>.
+        </li>
+        <li>
+          Developers: Docker images and package caches land in System Data. Clear them with our{" "}
+          <Link href={DOCKER_GUIDE_PATH}>Docker guide</Link> and{" "}
+          <Link href={HOMEBREW_GUIDE_PATH}>Homebrew and npm cache guide</Link>.
+        </li>
+        <li>
+          Leftover installers can also count here. See{" "}
+          <Link href={INSTALLERS_GUIDE_PATH}>how to delete old macOS installers</Link>.
+        </li>
+      </ul>
 
       <h2>Frequently asked questions</h2>
       {faqs.map(({ q, a }) => (

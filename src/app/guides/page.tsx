@@ -6,11 +6,16 @@ import { pages } from "@/lib/site";
 const path = "/guides";
 const title = "Mac Storage Guides";
 const description =
-  "Step-by-step Mac storage guides: free up space, clear caches, reduce System Data, find large and duplicate files, and fix 'not enough space to update'.";
+  "Step-by-step Mac storage guides: free up space, clear caches, reduce System Data and the macOS category, delete Time Machine snapshots, and compare Mac cleaner apps.";
 
 export const metadata = pageMetadata({ title: "Mac Storage Guides and How-Tos", description, path });
 
-const groups = ["Guides", "US guides", "UK guides"] as const;
+const groups = [
+  { key: "Guides", title: "Free up space on your Mac" },
+  { key: "Caches", title: "Clear caches in macOS, browsers and apps" },
+  { key: "Developers", title: "Storage help for developers" },
+  { key: "Compare", title: "Mac cleaner apps compared" },
+] as const;
 
 /** Index of every guide, so each one is a click from a crawlable hub and not only a footer link. */
 export default function GuidesIndexPage() {
@@ -21,9 +26,9 @@ export default function GuidesIndexPage() {
       breadcrumb="Guides"
       graph={innerPageGraph({ path, name: title, description, type: "CollectionPage" })}
     >
-      {groups.map((group) => (
+      {groups.map(({ key: group, title: heading }) => (
         <section key={group}>
-          <h2>{group === "Guides" ? "Mac storage how-tos" : group === "US guides" ? "Guides for US readers" : "Guides for UK readers"}</h2>
+          <h2>{heading}</h2>
           <ul>
             {pages
               .filter((p) => p.group === group)

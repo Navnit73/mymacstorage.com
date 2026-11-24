@@ -1,4 +1,17 @@
-import { guidePath } from "@/lib/site";
+import {
+  guidePath,
+  CHECK_STORAGE_GUIDE_PATH,
+  SNAPSHOTS_GUIDE_PATH,
+  PHOTOS_GUIDE_PATH,
+  MESSAGES_GUIDE_PATH,
+  MAIL_GUIDE_PATH,
+  INSTALLERS_GUIDE_PATH,
+  DOWNLOADS_GUIDE_PATH,
+  ICLOUD_GUIDE_PATH,
+  EXTERNAL_DRIVE_GUIDE_PATH,
+  DOCKER_GUIDE_PATH,
+  MACOS_STORAGE_GUIDE_PATH,
+} from "@/lib/site";
 import { Price } from "@/components/price";
 import Link from "next/link";
 import { ContentPage } from "@/components/content-page";
@@ -413,6 +426,38 @@ export default function GuidePage() {
         Want to go further? Read how to <Link href={guidePath("us", "appCleaner")}>remove apps and their leftovers</Link>{" "}
         and compare <Link href={guidePath("us", "diskAnalyzer")}>disk space analyzers for Mac</Link>.
       </p>
+
+      <h2>Go deeper: one guide for each space hog</h2>
+      <p>Each step above has its own detailed guide. Start with the category that is biggest on your Mac.</p>
+      <ul>
+        <li>
+          Not sure where the space went? <Link href={CHECK_STORAGE_GUIDE_PATH}>Check storage on your Mac</Link> first.
+        </li>
+        <li>
+          Photos and videos: <Link href={PHOTOS_GUIDE_PATH}>shrink your Photos library</Link>.
+        </li>
+        <li>
+          Chats and email: <Link href={MESSAGES_GUIDE_PATH}>clear Messages storage</Link> and{" "}
+          <Link href={MAIL_GUIDE_PATH}>reduce Mail storage</Link>.
+        </li>
+        <li>
+          Forgotten files: <Link href={DOWNLOADS_GUIDE_PATH}>clear your Downloads folder</Link> and{" "}
+          <Link href={INSTALLERS_GUIDE_PATH}>delete old macOS installers</Link>.
+        </li>
+        <li>
+          Space that won&rsquo;t come back: <Link href={SNAPSHOTS_GUIDE_PATH}>delete Time Machine snapshots</Link>{" "}
+          and fix <Link href={ICLOUD_GUIDE_PATH}>iCloud Drive using local space</Link>.
+        </li>
+        <li>
+          A large grey macOS bar: read <Link href={MACOS_STORAGE_GUIDE_PATH}>why macOS takes up so much storage</Link>.
+        </li>
+        <li>
+          Developers: <Link href={DOCKER_GUIDE_PATH}>reclaim space from Docker</Link>.
+        </li>
+        <li>
+          Still short on room? <Link href={EXTERNAL_DRIVE_GUIDE_PATH}>Move files to an external drive</Link>.
+        </li>
+      </ul>
 
       <h2>Frequently asked questions</h2>
       {faqs.map(({ q, a }) => (

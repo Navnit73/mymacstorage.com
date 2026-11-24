@@ -9,12 +9,18 @@ const productLinks = [
   { href: "/#faq", label: "FAQ" },
 ];
 
-// Product links first, then each page group in the order it first appears in `pages`.
+// Product links first, then each page group in the order it first appears in `pages`. Long groups show their first
+// few pages and a link to /guides, which lists everything, so the footer stays a short, useful set of links.
+const FOOTER_LIMIT = 6;
+const footerGroups = ["Guides", "Caches", "Compare", "Company", "Legal"];
 const columns = [
-  { title: "Product", links: productLinks },
-  ...[...new Set(pages.map((p) => p.group))].map((group) => ({
+  { title: "Product", links: [...productLinks, { href: "/guides", label: "All guides" }] },
+  ...footerGroups.map((group) => ({
     title: group,
-    links: pages.filter((p) => p.group === group).map(({ path, label }) => ({ href: path, label })),
+    links: pages
+      .filter((p) => p.group === group)
+      .slice(0, FOOTER_LIMIT)
+      .map(({ path, label }) => ({ href: path, label })),
   })),
 ];
 
